@@ -1,0 +1,122 @@
+﻿@model VentaMusical.Models.ViewModels.Canciones.CrearCancion
+
+@{
+    ViewBag.Title = "Agregar Canción";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Agregar Canción</h2>
+<br />
+
+@if (ViewBag.ValorMensaje == 1)
+{
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            onclick="document.location.href='@Url.Content("~/Canciones/Index")'">
+                        &times;
+                    </button>
+                    <h2 class="modal-title">Mensaje</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-success">@ViewBag.MensajeProceso</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal"
+                            onclick="document.location.href='@Url.Content("~/Canciones/Index")'">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else if (ViewBag.ValorMensaje == 0)
+{
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">&times;</button>
+                    <h2 class="modal-title">Mensaje</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger">@ViewBag.MensajeProceso</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm("Create", "Canciones", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="card shadow-lg p-4 rounded-4" style="background-color: #FDE2BA">
+        <div class="row">
+
+            <div class="col-md-6 d-flex flex-column align-items-center">
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.CodigoGenero)
+                    @Html.DropDownListFor(m => m.CodigoGenero, Model.GenerosDisponibles, "Seleccione un género", new { @class = "form-select" })
+                    @Html.ValidationMessageFor(m => m.CodigoGenero, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.CodigoAlbum)
+                    @Html.DropDownListFor(m => m.CodigoAlbum, Model.AlbumesDisponibles, "Seleccione un álbum", new { @class = "form-select" })
+                    @Html.ValidationMessageFor(m => m.CodigoAlbum, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.NombreCancion)
+                    @Html.TextBoxFor(m => m.NombreCancion, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.NombreCancion, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6 d-flex flex-column align-items-center">
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.LinkVideo)
+                    @Html.TextBoxFor(m => m.LinkVideo, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.LinkVideo, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Precio)
+                    @Html.TextBoxFor(m => m.Precio, new { @type = "number", @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Precio, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.CantidadDisponible)
+                    @Html.TextBoxFor(m => m.CantidadDisponible, new { @type = "number", @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.CantidadDisponible, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+
+            </div>
+        </div>
+    <br />
+    <div class="d-flex justify-content-evenly">
+        <input type="submit" class="btn btnCreate w-100 btn-lg" value="Guardar Canción" />
+        <input type="button" class="btn btn-secondary w-100 btn-lg"
+               value="Volver a la lista"
+               onclick="document.location.href='@Url.Content("~/Canciones/Index")'" />
+    </div>
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myModal').modal('show');
+        });
+    </script>
+}

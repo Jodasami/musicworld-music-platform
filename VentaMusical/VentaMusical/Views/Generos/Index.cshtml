@@ -1,0 +1,41 @@
+﻿@model IEnumerable<VentaMusical.Models.Generos>
+
+@{
+    ViewBag.Title = "Lista de Géneros";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<br />
+
+<div class="row mb-3">
+    <div class="col-auto">
+        <input type="button" class="btn btnCreate"
+               value="Agregar Nuevo Género"
+               onclick="document.location.href='@Url.Action("Create", "Generos")'" />
+    </div>
+</div>
+
+<table class="table table-striped table-bordered text-center custom-table">
+    <thead class="table-dark">
+        <tr>
+            <th>Código</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.CodigoGenero</td>
+                <td>@item.Descripcion</td>
+                <td>
+                    <a class="btn btnEdit btn-sm" href="@Url.Action("Edit", new { id = item.CodigoGenero })">Editar</a>
+                    <a class="btn btnDetails btn-sm" href="@Url.Action("Details", new { id = item.CodigoGenero })">Detalles</a>
+                    <a class="btn btnDelete btn-sm" href="@Url.Action("Delete", new { id = item.CodigoGenero })">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

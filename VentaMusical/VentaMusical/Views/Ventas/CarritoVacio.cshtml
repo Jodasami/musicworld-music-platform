@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "Carrito vacío";
+}
+
+<h2>Carrito vacío</h2>
+
+<div class="alert alert-warning">
+    <strong>Atención:</strong> @ViewBag.Mensaje
+</div>
+
+<p>Por favor, agregue canciones al carrito antes de continuar con la facturación.</p>
+
+<a href="@Url.Action("Index", "Canciones")" class="btn btn-primary">Ir al catálogo</a>

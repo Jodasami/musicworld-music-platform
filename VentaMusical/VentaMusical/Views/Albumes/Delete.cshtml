@@ -1,0 +1,40 @@
+﻿@model VentaMusical.Models.Albumes
+
+@{
+    ViewBag.Title = "Eliminar Álbum";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Eliminar Álbum</h2>
+<br />
+<br />
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card shadow-sm p-4 rounded-4">
+            <h4 class="text-danger text-center mb-4">¿Estás seguro que deseas eliminar este Álbum?</h4>
+
+            <dl class="row">
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.NombreAlbum)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.NombreAlbum)</dd>
+
+                <dt class="col-sm-4">Artista</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Artistas.NombreArtistico)</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.AnoLanzamiento)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.AnoLanzamiento)</dd>
+            </dl>
+
+            @using (Html.BeginForm("Delete", "Albumes", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.CodigoAlbum) <!-- Campo oculto para identificar el álbum -->
+
+                <div class="text-center mt-4">
+                    <input type="submit" value="Eliminar" class="btn btn-danger btn-lg" />
+                    @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary btn-lg" })
+                </div>
+            }
+        </div>
+    </div>
+</div>

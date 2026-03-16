@@ -1,0 +1,68 @@
+﻿@model VentaMusical.Models.ViewModels.Usuarios.Usuario
+
+@{
+    ViewBag.Title = "Detalles del Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+<br />
+
+<div class="row">
+
+    @* Columna izquierda: información básica *@
+    <div class="col-md-6">
+        <div class="card shadow p-4 mb-4" style="background-color:#FDE2BA;">
+            <h4 class="mb-4 text-center">Información del Usuario</h4>
+            <dl class="row">
+                <dt class="col-sm-5">ID</dt>
+                <dd class="col-sm-7">@Model.IDUsuario</dd>
+
+                <dt class="col-sm-5">Cédula</dt>
+                <dd class="col-sm-7">@Model.NumeroIdentificacion</dd>
+
+                <dt class="col-sm-5">Nombre</dt>
+                <dd class="col-sm-7">@Model.Nombre</dd>
+
+                <dt class="col-sm-5">Apellido</dt>
+                <dd class="col-sm-7">@Model.Apellido</dd>
+
+                <dt class="col-sm-5">Género</dt>
+                <dd class="col-sm-7">@Model.Genero</dd>
+
+                <dt class="col-sm-5">Correo</dt>
+                <dd class="col-sm-7">@Model.Correo</dd>
+            </dl>
+        </div>
+    </div>
+
+    @* Columna derecha: información financiera y de perfil *@
+    <div class="col-md-6">
+        <div class="card shadow p-4 mb-4" style="background-color:black; color:white;">
+            <h4 class="mb-4 text-center">Información Financiera y Perfil</h4>
+            <dl class="row">
+                <dt class="col-sm-5">Tipo de Tarjeta</dt>
+                <dd class="col-sm-7">@Model.TipoTarjeta</dd>
+
+                <dt class="col-sm-5">Número de Tarjeta</dt>
+                <dd class="col-sm-7">@Model.NumeroTarjeta</dd>
+
+                <dt class="col-sm-5">Dinero Disponible</dt>
+                <dd class="col-sm-7">@Model.DineroDisponible ₡</dd>
+
+                <dt class="col-sm-5">Contraseña</dt>
+                <dd class="col-sm-7">@Model.Contrasena</dd>
+
+                <dt class="col-sm-5">Perfil</dt>
+                <dd class="col-sm-7">@Model.Perfil</dd>
+            </dl>
+        </div>
+    </div>
+
+</div>
+
+<div class="text-center mt-4">
+    <a href="@Url.Action("Edit", new { id = Model.IDUsuario })" class="btn btnCreate btn-lg">Editar</a>
+    <a href="@(Session["Rol"] != null && Session["Rol"].Equals("Admin") ? Url.Action("Index") : Url.Action("Dashboard","Home"))"
+       class="btn btn-secondary btn-lg ms-2">Volver al listado</a>
+</div>

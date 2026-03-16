@@ -1,0 +1,43 @@
+﻿@model VentaMusical.Models.ViewModels.Usuarios.Usuario
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="col-lg-5">
+        <div class="card shadow-lg border-0 rounded-4 p-4 align-items-center" style="background-color: #292929;">
+
+            <img src="~/Content/Img/Logo.png" alt="Logo" class="logoGrande mb-3" />
+
+            <h1 class="text-center mb-4 text-white">Iniciar Sesión</h1>
+
+            @using (Html.BeginForm("Login", "Usuarios", FormMethod.Post))
+            {
+                <div class="form-floating mb-3 w-100">
+                    @Html.TextBoxFor(m => m.Correo, new { @class = "form-control", placeholder = "Correo registrado" })
+                    @Html.LabelFor(m => m.Correo)
+                </div>
+
+                <div class="form-floating mb-4 w-100">
+                    @Html.PasswordFor(m => m.Contrasena, new { @class = "form-control", placeholder = "Contraseña" })
+                    @Html.LabelFor(m => m.Contrasena)
+                </div>
+
+                <button type="submit" class="btn btnCreate py-2 w-100">Iniciar Sesión</button>
+            }
+
+            @if (TempData["LoginError"] != null)
+            {
+                <div class="alert alert-danger mt-3 w-100 text-center" role="alert">
+                    @TempData["LoginError"]
+                </div>
+            }
+
+            <div class="text-center mt-3 text-white">
+                ¿No tienes una cuenta?
+                <a href="@Url.Action("Create", "Usuarios")" class="text-decoration-none text-primary">Regístrate aquí</a>
+            </div>
+
+        </div>
+    </div>
+</div>

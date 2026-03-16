@@ -1,0 +1,68 @@
+﻿@model VentaMusical.Models.ViewModels.Albumes.EditarAlbum
+@{
+    ViewBag.Title = "Editar Álbum";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+
+@using (Html.BeginForm("Edit", "Albumes", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.CodigoAlbum)
+
+    <div class="card shadow-lg p-4 rounded-4" style="background-color: #FDE2BA">
+        <div class="row">
+            <div class="col-md-6 d-flex flex-column align-items-center">
+                <div class="w-75 mb-3">
+                    @Html.LabelFor(m => m.NombreAlbum)
+                    @Html.TextBoxFor(m => m.NombreAlbum, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.NombreAlbum, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="w-75 mb-3">
+                    @Html.LabelFor(m => m.AnoLanzamiento)
+                    @Html.TextBoxFor(m => m.AnoLanzamiento, new { @class = "form-control", type = "number" })
+                    @Html.ValidationMessageFor(m => m.AnoLanzamiento, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="w-75 mb-3">
+                    @Html.LabelFor(m => m.CodigoArtista)
+                    @Html.DropDownListFor(m => m.CodigoArtista, Model.Artistas, "Seleccione un artista", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.CodigoArtista, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-6 d-flex flex-column align-items-center">
+                <div class="w-75 mb-3 text-center">
+                    <label class="d-block mb-2">Portada Actual</label>
+                    <div class="card shadow-sm p-2 rounded-4 d-flex justify-content-center align-items-center" style="min-height:150px; background-color: black">
+                        <img src="@Model.ImagenPortada" alt="Portada Actual" style="max-height:50%; max-width:50%;" />
+                    </div>
+                </div>
+
+                <div class="w-75 mb-3">
+                    <label>Link de Portada (Opcional)</label>
+                    @Html.TextBoxFor(m => m.ImagenPortada, new { @class = "form-control", placeholder = "https://..." })
+                    @Html.ValidationMessageFor(m => m.ImagenPortada, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="d-flex justify-content-evenly">
+        <input type="submit" value="Actualizar" class="btn btnCreate w-100 btn-lg" />
+        <input type="button" class="btn btn-secondary w-100 btn-lg" value="Volver a la lista"
+               onclick="document.location.href='@Url.Action("Index","Albumes")'" />
+    </div>
+}
+
+
+
+
+
+

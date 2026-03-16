@@ -1,0 +1,37 @@
+﻿@model VentaMusical.Models.ViewModels.Generos.Genero
+
+@{
+    ViewBag.Title = "Eliminar Género";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<br />
+<br />
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card shadow-sm p-4 rounded-4" style="background-color: #FDE2BA">
+            <h4 class="text-danger text-center mb-4">¿Estás seguro que deseas eliminar este género?</h4>
+
+            <dl class="row">
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.CodigoGenero)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.CodigoGenero)</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Descripcion)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Descripcion)</dd>
+            </dl>
+
+            @using (Html.BeginForm("Delete", "Generos", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.CodigoGenero)
+
+                <div class="text-center mt-4">
+                    <input type="submit" value="Eliminar" class="btn btn-danger btn-lg" />
+                    @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary btn-lg ms-2" })
+                </div>
+            }
+        </div>
+    </div>
+</div>

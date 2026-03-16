@@ -1,0 +1,201 @@
+﻿@model VentaMusical.Models.ViewModels.Ventas.Venta
+
+@{
+    ViewBag.Title = "Registrar Nueva Venta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Registrar Nueva Venta</h2>
+<br />
+
+@if (ViewBag.ValorMensaje != null)
+{
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            onclick="document.location.href='@Url.Content("~/Ventas/Index")'">
+                        &times;
+                    </button>
+                    <h2 class="modal-title">Mensaje</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="alert @(ViewBag.ValorMensaje == 1 ? "alert-success" : "alert-danger")">
+                        @ViewBag.MensajeProceso
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal"
+                            onclick="document.location.href='@Url.Content("~/Ventas/Index")'">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm("Create", "Ventas", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="card shadow-lg p-4 rounded-4" style="background-color: #FDE2BA">
+        <div class="row">
+
+            <!-- Columna izquierda: Información de la venta -->
+            <div class="col-md-6 d-flex flex-column align-items-center">
+                <h4>Información de la Venta</h4>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.IDUsuario, "Cliente")
+                    @Html.DropDownList("IDUsuario", (SelectList)ViewBag.IDUsuario, "Seleccione un usuario", new { @class = "form-select", required = "required" })
+                    @Html.ValidationMessageFor(model => model.IDUsuario, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.CodigoCancion, "Canción")
+                    @Html.DropDownListFor(model => model.CodigoCancion, (SelectList)ViewBag.CodigoCancion, "Seleccione una canción", new { @class = "form-select", id = "CodigoCancion", required = "required" })
+                    @Html.ValidationMessageFor(model => model.CodigoCancion, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.TipoPago, "Método de Pago")
+                    @Html.DropDownListFor(model => model.TipoPago, new SelectList(new[] {
+                        new { Value = "Tarjeta", Text = "Tarjeta de Crédito" },
+                        new { Value = "PayPal", Text = "PayPal" },
+                        new { Value = "Transferencia", Text = "Transferencia Bancaria" },
+                        new { Value = "Crédito", Text = "Crédito Disponible" }
+                    }, "Value", "Text"), "Seleccione método de pago", new { @class = "form-select", id = "TipoPago", required = "required" })
+                    @Html.ValidationMessageFor(model => model.TipoPago, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3" id="CodigoTarjetaGrupo" style="display:none;">
+                    @Html.LabelFor(model => model.CodigoTarjeta, "Últimos 4 dígitos de tarjeta")
+                    @Html.TextBoxFor(model => model.CodigoTarjeta, new { @class = "form-control", maxlength = "4", placeholder = "1234", pattern = "[0-9]{4}" })
+                    @Html.ValidationMessageFor(model => model.CodigoTarjeta, "", new { @class = "text-danger" })
+                    <span class="help-block">Solo si es diferente a la tarjeta registrada del usuario</span>
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.EnviadaPorCorreo)
+                    <div class="form-check">
+                        @Html.CheckBoxFor(model => model.EnviadaPorCorreo, new { @class = "form-check-input" })
+                        <label class="form-check-label">Enviar factura por correo electrónico</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna derecha: Cálculos automáticos -->
+            <div class="col-md-6 d-flex flex-column align-items-center">
+                <h4>Cálculos Automáticos</h4>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.TotalSinIVA, "Subtotal")
+                    @Html.TextBoxFor(model => model.TotalSinIVA, new { @class = "form-control", type = "number", step = "0.01", placeholder = "Se calculará automáticamente", id = "TotalSinIVA", @readonly = "readonly" })
+                    <span class="help-block">Se calcula automáticamente según la canción seleccionada</span>
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.IVA, "IVA (13%)")
+                    @Html.TextBoxFor(model => model.IVA, new { @class = "form-control", type = "number", step = "0.01", placeholder = "Se calculará automáticamente", id = "IVA", @readonly = "readonly" })
+                </div>
+
+                <div class="mb-3" id="RecargoTarjetaGrupo" style="display:none;">
+                    @Html.LabelFor(model => model.RecargoTarjeta, "Recargo Tarjeta (2%)")
+                    @Html.TextBoxFor(model => model.RecargoTarjeta, new { @class = "form-control", type = "number", step = "0.01", placeholder = "Solo para tarjeta de crédito", id = "RecargoTarjeta", @readonly = "readonly" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.TotalFinal, "Total Final")
+                    @Html.TextBoxFor(model => model.TotalFinal, new { @class = "form-control", type = "number", step = "0.01", placeholder = "Se calculará automáticamente", id = "TotalFinal", @readonly = "readonly", style = "font-weight:bold; font-size:16px; color:#2c5282;" })
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <br />
+    <div class="d-flex justify-content-evenly">
+        <input type="submit" class="btn btnCreate w-100 btn-lg" value="Registrar Venta" />
+        <input type="button" class="btn btn-secondary w-100 btn-lg" value="Cancelar" onclick="document.location.href='@Url.Content("~/Ventas/Index")'" />
+    </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Mostrar modal si hay mensaje
+            if ($('#myModal').length) {
+                $('#myModal').modal('show');
+            }
+
+            function actualizarValores() {
+                const subtotal = parseFloat($("#TotalSinIVA").val()) || 0;
+                const iva = +(subtotal * 0.13).toFixed(2);
+                const recargo = $("#TipoPago").val() === "Tarjeta" ? +(subtotal * 0.02).toFixed(2) : 0;
+                const total = +(subtotal + iva + recargo).toFixed(2);
+
+                $("#IVA").val(iva.toFixed(2));
+                $("#RecargoTarjeta").val(recargo.toFixed(2));
+                $("#TotalFinal").val(total.toFixed(2));
+            }
+
+            function toggleCamposSegunTipoPago() {
+                const tipo = $("#TipoPago").val();
+
+                if (tipo === "Tarjeta") {
+                    $("#CodigoTarjetaGrupo").show();
+                    $("#RecargoTarjetaGrupo").show();
+                } else {
+                    $("#CodigoTarjetaGrupo").hide();
+                    $("#RecargoTarjetaGrupo").hide();
+                    $("#RecargoTarjeta").val("0");
+                }
+
+                actualizarValores();
+            }
+
+            $("#CodigoCancion").change(function () {
+                const id = $(this).val();
+                if (!id || isNaN(id)) {
+                    $("#TotalSinIVA").val("0");
+                    actualizarValores();
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("ObtenerPrecioCancion", "Ventas")',
+                    type: 'GET',
+                    data: { id: id },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.error) {
+                            alert('Error: ' + data.error);
+                            $("#TotalSinIVA").val("0");
+                        } else {
+                            const precio = parseFloat(data.precio);
+                            if (!isNaN(precio)) {
+                                $("#TotalSinIVA").val(precio.toFixed(2));
+                                actualizarValores();
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error al obtener precio:", error);
+                        alert('Error al obtener el precio de la canción');
+                        $("#TotalSinIVA").val("0");
+                        actualizarValores();
+                    }
+                });
+            });
+
+            $("#TipoPago").change(function () {
+                toggleCamposSegunTipoPago();
+            });
+
+            toggleCamposSegunTipoPago();
+            actualizarValores();
+        });
+    </script>
+}

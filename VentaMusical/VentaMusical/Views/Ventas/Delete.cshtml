@@ -1,0 +1,37 @@
+﻿@model VentaMusical.Models.ViewModels.Ventas.Venta
+
+@{
+    ViewBag.Title = "Eliminar Venta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Eliminar Venta</h2>
+
+<div class="alert alert-warning">
+    <h4>⚠️ ¿Está seguro de que desea eliminar esta venta?</h4>
+    <p>Esta acción no se puede deshacer.</p>
+</div>
+
+<div class="well">
+    <h4>Información de la Venta</h4>
+    <table class="table table-bordered">
+        <tr><th>Número de Factura:</th><td>@Model.NumeroFactura</td></tr>
+        <tr><th>Fecha:</th><td>@Model.FechaCompra.ToString("dd/MM/yyyy HH:mm")</td></tr>
+        <tr><th>Total:</th><td>₡@Model.TotalFinal.ToString("N2")</td></tr>
+        <tr><th>Tipo de Pago:</th><td>@Model.TipoPago</td></tr>
+        <tr><th>Estado:</th><td>@Model.Estado</td></tr>
+    </table>
+</div>
+
+@using (Html.BeginForm("Delete", "Ventas", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("NumeroFactura", Model.NumeroFactura)
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-danger">
+            <span class="glyphicon glyphicon-trash"></span> Confirmar Eliminación
+        </button>
+        @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-default" })
+    </div>
+}

@@ -1,0 +1,161 @@
+﻿/*
+    COLORES:
+    Naranja principal: #f8a62b
+    Oscuro: #724604
+    Cards: #FDE2BA
+    Fondo: #FEF5E6
+
+    FOOTER Y NAVBAR:black;
+
+
+*/
+
+body {
+    background-color: #FEF5E6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.body-content {
+    flex: 1;
+}
+
+.custom-card-bg {
+    background-color: #ffffffee;
+}
+
+.card h3 {
+    font-weight: 600;
+}
+
+
+table {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+footer {
+    margin-top: 10px;
+    position: relative;
+    width: 100%;
+    color: white;
+    background-color: black;
+    align-items: center;
+}
+
+.Titulo {
+    color: #701705;
+    font-size: 50px;
+}
+
+.logoGrande{
+    align-self: center;
+    padding: 10px;
+    max-width: 300px;
+    border-radius: 50px;
+}
+
+.BtnValido {
+    background-color: #c82909;
+    color: white;
+}
+
+.BtnValido:hover {
+    background-color: #440E03;
+    color: white;
+}
+
+.navbar {
+    position: sticky;
+    width: 100%;
+    color: white;
+    background-color: black;
+    align-items: center;
+    font-size: 1.1rem; /* más grande */
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+.navbar-brand {
+    font-size: 1.3rem;
+}
+
+.Bienvenida .card {
+    background-color: #821E05;
+}
+
+.card-body {
+    background-color: #FDE2BA;
+}
+
+.kpi-card-body {
+    background-color: #AB8982;
+}
+
+.custom-table tbody {
+    background-color: #FBCF8D;
+}
+    .custom-table tbody tr td {
+        background-color: #FDE2BA;
+        
+    }
+
+.btnEdit {
+    background-color: #9D4B07;
+    color: white;
+}
+
+    .btnEdit:hover {
+        background-color: #000000;
+        color: white;
+    }
+
+.btnDetails {
+    background-color: #451103;
+    color: white;
+}
+
+    .btnDetails:hover {
+        background-color: #000000;
+        color: white;
+    }
+
+.btnDelete {
+    background-color: #D11100;
+    color: white;
+}
+
+    .btnDelete:hover {
+        background-color: #000000;
+        color: white;
+    }
+
+.btnCreate {
+    background-color: #F79708;
+    color: white;
+}
+
+    .btnCreate:hover {
+        background-color: #724604;
+        color: white;
+    }
+
+h2{
+    color:black;
+}
+
+
+
+.ImagenForm {
+    width: 100%;
+}
+
+.Detalles {
+    background-color: #D6C5C1;
+}
+

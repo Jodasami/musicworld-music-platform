@@ -1,0 +1,26 @@
+﻿@model VentaMusical.Models.ViewModels.Carritos.AgregarCancion
+
+@{
+    ViewBag.Title = "Agregar Canción al Carrito";
+}
+
+<h3 class="text-primary">🎵 Agregar Canción</h3>
+
+@using (Html.BeginForm("Agregar", "Carrito", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label for="CodigoCancion">Seleccione una canción:</label>
+        @Html.DropDownListFor(m => m.CodigoCancion, ViewBag.ListadoCanciones as SelectList, "Seleccione...", new { @class = "form-control" })
+    </div>
+
+    <div class="form-group mt-2">
+        <label for="Cantidad">Cantidad:</label>
+        @Html.TextBoxFor(m => m.Cantidad, new { @class = "form-control", type = "number", min = "1" })
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Agregar al Carrito</button>
+    @Html.ActionLink("Volver al Carrito", "Index", null, new { @class = "btn btn-secondary ms-2" })
+}
+

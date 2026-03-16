@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "Compra Cancelada";
+}
+
+<h2 class="text-danger">🗑️ Compra Cancelada</h2>
+
+<div class="alert alert-info text-center">
+    El carrito ha sido vaciado correctamente. Puedes iniciar una nueva compra cuando gustes.
+</div>
+
+<div class="text-center mt-4">
+    @Html.ActionLink("Volver a la tienda", "Index", "Canciones", new { @class = "btn btn-primary" })
+    @Html.ActionLink("Ir al resumen de ventas", "Index", "Ventas", new { @class = "btn btn-outline-secondary ms-2" })
+</div>
+

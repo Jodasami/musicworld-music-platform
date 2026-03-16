@@ -1,0 +1,55 @@
+﻿@model IEnumerable<VentaMusical.Models.Albumes>
+@{
+    ViewBag.Title = "Álbumes Disponibles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+<br />
+
+@using (Html.BeginForm("Index", "Albumes", FormMethod.Get, new { @id = "FormAlbumes" }))
+{
+<div class="row mb-3 d-flex justify-content-evenly align-items-end">
+    @* BOTÓN PARA AGREGAR NUEVO ÁLBUM *@
+    <div class="col-auto">
+        <input type="button" class="btn btnCreate" value="Agregar Nuevo Álbum"
+               onclick="document.location.href='@Url.Action("Create", "Albumes")'" />
+    </div>
+
+    @* FILTRO *@
+    <div class="col-auto d-flex align-items-end">
+        <div class="me-2">
+            <strong>Filtrar por Artista:</strong>
+            @Html.DropDownList("CodigoArtista", (SelectList)ViewBag.ListaDeArtistas, "Todos los artistas", new { @class = "form-control" })
+        </div>
+        <div>
+            <input type="submit" value="Filtrar" class="btn btnCreate" />
+        </div>
+    </div>
+</div>
+}
+
+<table class="table table-striped table-bordered text-center custom-table">
+    <thead class="table-dark">
+        <tr>
+            <th>Nombre del Álbum</th>
+            <th>Artista</th>
+            <th>Año de Lanzamiento</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.NombreAlbum)</td>
+                <td>@Html.DisplayFor(modelItem => item.Artistas.NombreArtistico)</td>
+                <td>@Html.DisplayFor(modelItem => item.AnoLanzamiento)</td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.CodigoAlbum }, new { @class = "btn btnEdit btn-sm" })
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.CodigoAlbum }, new { @class = "btn btnDelete btn-sm" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

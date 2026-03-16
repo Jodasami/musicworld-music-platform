@@ -1,0 +1,182 @@
+﻿@model VentaMusical.Models.ViewModels.Carritos.VistaCarrito
+@{
+    ViewBag.Title = "Carrito de Compras";
+    var resumen = Model.Resumen;
+}
+
+<!-- Información de debug (remover en producción) -->
+<div class="debug-info mb-3" style="display: none;">
+    <p class="text-muted">🧪 Vista del carrito cargada correctamente.</p>
+    <p class="text-muted">🧪 Carrito vacío, renderizando partial...</p>
+</div>
+
+<!-- Contenedor principal del carrito -->
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <div class="card mb-4 border-primary shadow-sm">
+                <!-- Header del carrito -->
+                <div class="card-header text-white d-flex align-items-center"  style="background-color: #f8a62b">
+                    <i class="bi bi-cart3 me-2"></i>
+                    <h4 class="mb-0">🛒 Carrito de Compras</h4>
+                </div>
+
+                <!-- Contenido del carrito -->
+                <div class="card-body p-4">
+                    @if (Model.VistaVaciaInfo != null)
+                    {
+                        @Html.Partial("_VacioInteractivo", Model.VistaVaciaInfo)
+                    }
+                    else
+                    {
+                        <!-- Tabla de productos -->
+                        <div class="table-responsive mb-4">
+                            <table class="table table-bordered table-hover table-striped align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Canción</th>
+                                        <th scope="col" class="text-center">Precio Unitario</th>
+                                        <th scope="col" class="text-center">Cantidad</th>
+                                        <th scope="col" class="text-center">Subtotal</th>
+                                        <th scope="col" class="text-center">Estado</th>
+                                        <th scope="col" class="text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Carrito)
+                                    {
+                                        <tr>
+                                            <td><strong>@item.NombreCancion</strong></td>
+                                            <td class="text-center">@item.PrecioUnitario.ToString("C")</td>
+                                            <td class="text-center"><span class="badge bg-info">@item.Cantidad</span></td>
+                                            <td class="text-center"><span class="fw-bold text-success">@item.SubTotal.ToString("C")</span></td>
+                                            <td class="text-center">
+                                                <span class="badge @(item.Cantidad <= 3 ? "bg-warning text-dark" : "bg-success")">
+                                                    @(item.Cantidad <= 3 ? "Stock bajo" : "Disponible")
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                @Html.ActionLink("🗑️", "Eliminar", "Carrito",
+                                                         new { codigoCancion = item.CodigoCancion },
+                                                         new
+                                                         {
+                                                             @class = "btn btn-lg btn-outline-danger",
+                                                             title = "Eliminar del carrito",
+                                                             onclick = "return confirm('¿Está seguro de eliminar este item?')"
+                                                         })
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>-
+                        </div>
+
+                        <!-- Selección de tipo de pago -->
+                        <div class="card border-0 bg-light mb-4">
+                            <div class="card-header bg-info text-white">
+                                <h6 class="mb-0">💳 Seleccione Método de Pago</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="tipoPago" id="paypal" value="paypal" checked>
+                                    <label class="form-check-label" for="paypal">PayPal</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="tipoPago" id="transferencia" value="transferencia">
+                                    <label class="form-check-label" for="transferencia">Transferencia Bancaria</label>
+                                </div>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" name="tipoPago" id="tarjeta" value="tarjeta">
+                                    <label class="form-check-label" for="tarjeta">Tarjeta de Crédito (+2%)</label>
+                                </div>
+
+                                <!-- Información de tarjeta -->
+                                <div class="card border-0 bg-white">
+                                    <div class="card-header bg-light">
+                                        <strong>Información de la Tarjeta</strong>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-1">Tarjeta registrada: <strong>@Model.Resumen.TipoTarjeta</strong></p>
+                                        <p class="mb-1">**** **** **** <strong>@(Model.Resumen.CodigoTarjeta ?? "****")</strong></p>
+                                        <div class="mb-2">
+                                            <label for="cvv" class="form-label">Código de Seguridad (CVV)</label>
+                                            <input type="text" class="form-control" id="cvv" name="cvv" maxlength="4" placeholder="000">
+                                            <small class="text-muted">Ingrese el código de 3 o 4 dígitos del reverso de su tarjeta.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Resumen de la compra -->
+                        <div class="row">
+                            <div class="col-md-8"></div>
+                            <div class="col-md-4">
+                                <div class="card border-0 bg-light">
+                                    <div class="card-header bg-secondary text-white">
+                                        <h6 class="mb-0">📊 Resumen de Compra</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Subtotal:</span>
+                                            <span class="fw-semibold">@resumen.Subtotal.ToString("C")</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>IVA (13%):</span>
+                                            <span class="fw-semibold">@resumen.IVA.ToString("C")</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Recargo (2%):</span>
+                                            <span class="fw-semibold">@resumen.Recargo.ToString("C")</span>
+                                        </div>
+                                        @if (resumen.CreditoUsado > 0)
+                                        {
+                                            <div class="d-flex justify-content-between mb-2">
+                                                <span>Crédito usado:</span>
+                                                <span class="text-danger">-@resumen.CreditoUsado.ToString("C")</span>
+                                            </div>
+                                        }
+                                        <hr class="my-2">
+                                        <div class="d-flex justify-content-between">
+                                            <span class="fs-5 fw-bold">Total:</span>
+                                            <span class="fs-5 fw-bold text-success">@resumen.TotalFinal.ToString("C")</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botones de acción -->
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                    <a class="btn btnCreate btn-lg" href="@Url.Action("Index", "Canciones")">
+                        🎵 Ver Canciones
+                    </a>
+
+                    @Html.ActionLink("🗑️ Cancelar Compra", "Cancelar", "Carrito", null,
+                                                 new
+                                                 {
+                                                     @class = "btn btn-outline-secondary me-md-2 btn-lg",
+                                                     title = "Vaciar carrito",
+                                                     onclick = "return confirm('¿Está seguro de cancelar toda la compra?')"
+                                                 })
+
+                    @using (Html.BeginForm("Facturar", "Carrito", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("idUsuario", (int)Session["UsuarioId"])
+                        @Html.Hidden("codigoTarjeta", Model.Resumen.CodigoTarjeta ?? "****1234")
+
+
+
+                        <button type="submit" class="btn btn-success btn-lg" title="Finalizar compra">
+                            💳 Proceder al Pago
+                        </button>
+
+                    }
+                </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+﻿@model VentaMusical.Models.ViewModels.Artistas.Artista
+
+@{
+    ViewBag.Title = "Agregar Artista";
+}
+
+<h2>Agregar Artista</h2>
+<br />
+
+@using (Html.BeginForm("Create", "Artistas", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+
+    <div class="card shadow-lg p-4 rounded-4" style="background-color: #FDE2BA">
+
+        <div class="row">
+
+            <div class="col-md-6 d-flex flex-column align-items-center">
+
+                <div class="w-75 mb-3">
+                    <label>Nombre Artistico/Banda:</label>
+                    @Html.TextBoxFor(model => model.NombreArtistico, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.NombreArtistico, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="w-75 mb-3">
+                    <label>Nombre Real:</label>
+                    @Html.TextBoxFor(model => model.NombreReal, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.NombreReal, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="w-75 mb-3">
+                    <label>Fecha de Nacimiento:</label>
+                    @Html.TextBoxFor(model => model.FechaNacimiento, "{0:yyyy-MM-dd}", new { @type = "date", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.FechaNacimiento, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+
+            <div class="col-md-6 d-flex flex-column align-items-center">
+
+                <div class="w-75 mb-3">
+                    <label>Nacionalidad:</label>
+                    @Html.TextBoxFor(model => model.Nacionalidad, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Nacionalidad, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="w-75 mb-3">
+                    <label>Link a biografía:</label>
+                    @Html.TextBoxFor(model => model.LinkBiografia, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.LinkBiografia, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="w-75 mb-3">
+                    <label>Enlace a Foto:</label>
+                    @Html.TextBoxFor(model => model.Foto, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Foto, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+
+        </div>
+        </div>
+
+    <br />
+
+    <div class="d-flex justify-content-evenly">
+        <input type="submit" value="Guardar cambios" class="btn btnCreate w-100 btn-lg" />
+        <input type="button" class="btn btn-secondary w-100 btn-lg" value="Volver a la lista"
+               onclick="document.location.href='@Url.Content("~/Artistas/Index")'" />
+    </div>
+
+}

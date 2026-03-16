@@ -1,0 +1,66 @@
+﻿
+@model VentaMusical.Models.ViewModels.Albumes.CrearAlbum
+@{
+    ViewBag.Title = "Agregar Nuevo Álbum";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+
+@* El enctype es VITAL para poder subir archivos *@
+@using (Html.BeginForm("Create", "Albumes", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="card shadow-lg p-4 rounded-4" style="background-color: #FDE2BA">
+
+        <div class="row">
+            <div class="col-md-6 d-flex flex-column align-items-center">
+
+                <div class="w-75 mb-3">
+                    <label>Nombre del album</label>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.NombreAlbum, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.NombreAlbum, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="w-75 mb-3">
+                    <label>Año de Lanzamiento</label>
+                    @Html.EditorFor(model => model.AnoLanzamiento, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.AnoLanzamiento, "", new { @class = "text-danger" })
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6 d-flex flex-column align-items-center">
+
+                <div class="w-75 mb-3">
+
+                    @Html.LabelFor(model => model.CodigoArtista, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.DropDownList("CodigoArtista", (SelectList)ViewBag.CodigoArtista, "Seleccione un artista", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CodigoArtista, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="w-75 mb-3">
+
+                    @Html.LabelFor(model => model.Portada, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Portada, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Portada, "", new { @class = "text-danger" })
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <br />
+    <div class="d-flex justify-content-evenly">
+        <input type="submit" value="Crear" class="btn btnCreate w-100 btn-lg" />
+        <input type="button" class="btn btn-secondary w-100 btn-lg" value="Volver a la lista"
+               onclick="document.location.href='@Url.Content("~/Albumes/Index")'" />
+    </div>
+}

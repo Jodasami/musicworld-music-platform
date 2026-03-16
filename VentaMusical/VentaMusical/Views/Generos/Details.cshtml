@@ -1,0 +1,30 @@
+﻿@model VentaMusical.Models.ViewModels.Generos.Genero
+
+@{
+    ViewBag.Title = "Detalles del Género";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<br />
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card shadow-sm p-4 Detalles" style="background-color:#FDE2BA;">
+            <h4 class="mb-4 text-center">Información del Género</h4>
+
+            <dl class="row">
+                <dt class="col-sm-4">Código</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.CodigoGenero)</dd>
+
+                <dt class="col-sm-4">Descripción</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Descripcion)</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    @Html.ActionLink("Editar", "Edit", new { id = Model.CodigoGenero }, new { @class = "btn btnEdit btn-lg" })
+    <a href="@Url.Action("Index")" class="btn btn-secondary btn-lg ms-2">Volver al listado</a>
+</div>

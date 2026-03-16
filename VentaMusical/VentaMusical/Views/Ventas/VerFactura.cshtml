@@ -1,0 +1,38 @@
+﻿@model VentaMusical.Models.ViewModels.Facturas.FacturaViewModel
+
+<h2>Factura #@Model.NumeroFactura</h2>
+<p><strong>Fecha:</strong> @Model.Fecha.ToShortDateString()</p>
+<p><strong>Tipo de Pago:</strong> @Model.TipoPago</p>
+
+<div class="card shadow p-4 mb-4" style="background-color:darkslategray;">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Código Canción</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var d in Model.Detalles)
+            {
+                <tr>
+                    <td>@d.CodigoCancion</td>
+                    <td>@d.NombreCancion</td>
+                    <td>₡@d.PrecioUnitario.ToString("N2")</td>
+                    <td>@d.Cantidad</td>
+                    <td>₡@(d.PrecioUnitario * d.Cantidad).ToString("N2")</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4"><strong>Total:</strong></td>
+                <td>₡@Model.Total.ToString("N2")</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+

@@ -1,0 +1,59 @@
+﻿@model VentaMusical.Models.ViewModels.Carritos.VentaResumen
+
+@{
+    ViewBag.Title = "Confirmar Compra";
+}
+
+<h2 class="text-primary">✅ Confirmación de Compra</h2>
+
+@if (Model.Items == null || !Model.Items.Any())
+{
+    <div class="alert alert-warning text-center">
+        El carrito está vacío. No se puede proceder con la facturación.
+    </div>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Canción</th>
+                <th>Precio Unitario</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.NombreCancion</td>
+                    <td>@item.PrecioUnitario.ToString("C")</td>
+                    <td>@item.Cantidad</td>
+                    <td>@item.SubTotal.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-end">
+        <p><strong>Subtotal:</strong> @Model.Subtotal.ToString("C")</p>
+        <p><strong>IVA (13%):</strong> @Model.IVA.ToString("C")</p>
+        <p><strong>Recargo por Tarjeta (2%):</strong> @Model.RecargoTarjeta.ToString("C")</p>
+        <p class="fs-5"><strong>Total a Pagar:</strong> @Model.TotalFinal.ToString("C")</p>
+
+        <hr />
+
+        @using (Html.BeginForm("Facturar", "Carrito", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.IDUsuario)
+            @Html.HiddenFor(m => m.TipoPago)
+            @Html.HiddenFor(m => m.CodigoTarjeta)
+
+            <button type="submit" class="btn btn-primary me-2">💳 Confirmar Compra</button>
+        }
+
+        @Html.ActionLink("Cancelar", "Cancelar", "Carrito", null, new { @class = "btn btn-secondary" })
+    </div>
+}

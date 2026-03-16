@@ -1,0 +1,129 @@
+﻿@model VentaMusical.Models.ViewModels.Ventas.Venta
+@{
+    ViewBag.Title = "Detalle de Factura";
+}
+
+<div class="container my-4">
+    <h2 class="text-center mb-4">Factura #@Model.NumeroFactura</h2>
+
+    <div class="row">
+        <!-- Información general de la venta -->
+        <div class="col-md-6">
+            <div class="card shadow p-4 mb-4" style="background-color: #FDE2BA;">
+                <h4 class="mb-4 text-center">Información de la venta</h4>
+                <dl class="row">
+                    <dt class="col-sm-5">Usuario</dt>
+                    <dd class="col-sm-7">@Model.IDUsuario</dd>
+
+                    <dt class="col-sm-5">Fecha</dt>
+                    <dd class="col-sm-7">@Model.FechaCompra.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                    <dt class="col-sm-5">Tipo de Pago</dt>
+                    <dd class="col-sm-7">@Model.TipoPago</dd>
+
+                    <dt class="col-sm-5">Estado</dt>
+                    <dd class="col-sm-7">@Model.Estado</dd>
+
+                    <dt class="col-sm-5">Enviada por correo</dt>
+                    <dd class="col-sm-7">@((Model.EnviadaPorCorreo) ? "Sí" : "No")</dd>
+                </dl>
+            </div>
+        </div>
+
+        <!-- Información de precios -->
+        <div class="col-md-6">
+            <div class="card shadow p-4 mb-4" style="background-color: #FDE2BA;">
+                <h4 class="mb-4 text-center">Detalle de pagos</h4>
+                <dl class="row">
+                    <dt class="col-sm-6">Subtotal</dt>
+                    <dd class="col-sm-6">₡@Model.TotalSinIVA.ToString("N2")</dd>
+
+                    <dt class="col-sm-6">IVA (13%)</dt>
+                    <dd class="col-sm-6">₡@Model.IVA.ToString("N2")</dd>
+
+                    <dt class="col-sm-6">Recargo Tarjeta</dt>
+                    <dd class="col-sm-6">₡@Model.RecargoTarjeta.ToString("N2")</dd>
+
+                    <dt class="col-sm-6">Total Final</dt>
+                    <dd class="col-sm-6"><strong>₡@Model.TotalFinal.ToString("N2")</strong></dd>
+
+                    <dt class="col-sm-6">Crédito usado</dt>
+                    <dd class="col-sm-6">₡@Model.MontoCreditoUsado.ToString("N2")</dd>
+
+                    <dt class="col-sm-6">Monto Pagado</dt>
+                    <dd class="col-sm-6">₡@((Model.TotalFinal - Model.MontoRestante).ToString("N2"))</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <!-- Información de las canciones -->
+    @if (Model.Detalle != null && Model.Detalle.Any())
+    {
+        <h4 class="text-center mt-4">Detalle de canciones</h4>
+        <table class="table table-bordered table-striped text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>Código Canción</th>
+                    <th>Nombre Canción</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Detalle)
+                {
+                    <tr>
+                        <td>@item.CodigoCancion</td>
+                        <td>@item.NombreCancion</td>
+                        <td>@item.Cantidad</td>
+                        <td>₡@item.PrecioUnitario.ToString("N2")</td>
+                        <td>₡@item.SubTotal.ToString("N2")</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4"><strong>Total</strong></td>
+                    <td>
+                        ₡@Model.Detalle.Sum(d => d.SubTotal).ToString("N2")
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center">
+            No hay canciones registradas para esta factura.
+        </div>
+    }
+
+
+    <!-- Mensaje de envío por correo -->
+    @if (Model.EnviadaPorCorreo)
+    {
+        <div class="alert alert-success mt-3" role="alert">
+            <strong>Factura enviada por correo</strong>
+            @if (Model.FechaEnvioCorreo > DateTime.MinValue)
+            {
+                <span>el @Model.FechaEnvioCorreo.ToString("dd/MM/yyyy HH:mm")</span>
+            }
+            else
+            {
+                <span>Fecha de envío no registrada</span>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning mt-3" role="alert">
+            <strong>Factura no enviada por correo</strong>
+        </div>
+    }
+
+    <div class="text-center mt-4">
+        <a href="@Url.Action("Index", "Ventas")" class="btn btn-secondary btn-lg">Volver al listado</a>
+    </div>
+</div>

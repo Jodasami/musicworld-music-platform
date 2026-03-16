@@ -1,0 +1,71 @@
+﻿@model VentaMusical.Models.ViewModels.Artistas.Artista
+
+@{
+    ViewBag.Title = "Eliminar Artista";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Eliminar Artista</h2>
+<br />
+<br />
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card shadow-sm p-4 rounded-4" style="background-color: #FDE2BA">
+            <h4 class="text-danger text-center mb-4">¿Estás seguro que deseas eliminar este artista?</h4>
+
+            <div class="row">
+                <!-- Columna izquierda: detalles -->
+                <div class="col-md-8">
+                    <dl class="row">
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.CodigoArtista)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.CodigoArtista)</dd>
+
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.NombreArtistico)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.NombreArtistico)</dd>
+
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.NombreReal)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.NombreReal)</dd>
+
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.FechaNacimiento)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.FechaNacimiento)</dd>
+
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Nacionalidad)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Nacionalidad)</dd>
+
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.LinkBiografia)</dt>
+                        <dd class="col-sm-8">
+                            <a href="@Model.LinkBiografia" target="_blank">@Model.LinkBiografia</a>
+                        </dd>
+                    </dl>
+                </div>
+
+                <!-- Columna derecha: foto -->
+                <div class="col-md-4 d-flex flex-column align-items-center">
+                    <label class="d-block mb-2">Foto</label>
+                    <div class="card shadow-sm p-2 rounded-4 d-flex justify-content-center align-items-center" style="height:auto; min-height:150px; background-color: black; width: 100%;">
+                        @if (!string.IsNullOrEmpty(Model.Foto))
+                        {
+                            <img src="@Model.Foto" alt="Foto del artista" style="max-height:100%; max-width:100%;" />
+                        }
+                        else
+                        {
+                            <span class="text-white">Sin imagen</span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            @using (Html.BeginForm("Delete", "Artistas", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.CodigoArtista)
+
+                <div class="text-center mt-4">
+                    <input type="submit" value="Eliminar" class="btn btn-danger btn-lg" />
+                    @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary btn-lg ms-2" })
+                </div>
+            }
+        </div>
+    </div>
+</div>

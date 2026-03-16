@@ -1,0 +1,81 @@
+﻿@model VentaMusical.Models.ViewModels.Ventas.Venta
+@{
+    ViewBag.Title = "Editar Venta";
+}
+
+<h2>Editar Venta @Model.NumeroFactura</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDUsuario, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("IDUsuario", null, "Seleccione el usuario", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IDUsuario, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.FechaCompra)
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.FechaCompra, "{0:yyyy-MM-dd HH:mm}", new { @class = "form-control", type = "datetime-local", disabled = "disabled" })
+            </div>
+        </div>
+
+        @Html.EditorFor(m => m.TotalSinIVA, "Decimal")
+        @Html.EditorFor(m => m.IVA, "Decimal")
+        @Html.EditorFor(m => m.RecargoTarjeta, "Decimal")
+        @Html.EditorFor(m => m.TotalFinal, "Decimal")
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TipoPago)
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.TipoPago, new SelectList(new[] { "Tarjeta", "PayPal", "Transferencia" }), "Seleccione método", new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CodigoTarjeta)
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.CodigoTarjeta, new { @class = "form-control", maxlength = "4", placeholder = "Últimos 4 dígitos" })
+            </div>
+        </div>
+
+        @Html.EditorFor(m => m.MontoCreditoUsado, "Decimal")
+        @Html.EditorFor(m => m.MontoRestante, "Decimal")
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Estado)
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Estado, new SelectList(new[] { "Completada", "Pendiente", "Cancelada" }), "Seleccione estado", new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EnviadaPorCorreo)
+            <div class="col-md-10">
+                <label class="checkbox-inline">
+                    @Html.CheckBoxFor(model => model.EnviadaPorCorreo) Enviar por correo
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Actualizar" class="btn btn-primary" />
+                <a href="@Url.Action("Index", "Ventas")" class="btn btn-default">Cancelar</a>
+            </div>
+        </div>
+
+        @if (ViewBag.MensajeProceso != null)
+        {
+            <div class="alert @(ViewBag.ValorMensaje == 1 ? "alert-success" : "alert-danger")">
+                @ViewBag.MensajeProceso
+            </div>
+        }
+    </div>
+}

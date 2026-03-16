@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string rol = Session["Rol"]?.ToString();
+    string usuario = Session["Usuario"]?.ToString();
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Bienvenida -->
+        <div class="col-12 mb-4">
+            <div class="card shadow-lg p-4 text-white btnCreate rounded-4">
+                <h2 class="fw-bold text-white">¡Bienvenido, @usuario!</h2>
+            </div>
+        </div>
+
+        <!-- Información general -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Hora Actual</h5>
+                    <p class="card-text fs-3" id="horaActual">--:--:--</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card shadow text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Fecha</h5>
+                    <p class="card-text fs-3">@DateTime.Now.ToString("dd/MM/yyyy")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+@section Scripts {
+    <script>
+        function actualizarHora() {
+            const ahora = new Date();
+            const hora = ahora.toLocaleTimeString();
+            document.getElementById('horaActual').textContent = hora;
+        }
+        setInterval(actualizarHora, 1000);
+        actualizarHora();
+    </script>
+}

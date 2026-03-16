@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MusicWorld - @ViewBag.Title </title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <script src="https://website-widgets.pages.dev/dist/sienna.min.js" defer></script>
+    <link rel="icon" type="image/x-icon" href="~/Content/Img/Logo.ico" />
+    <link rel="stylesheet" href="~/Content/CustomCss.css" />
+</head>
+<body>
+    @* ------------------------------------------------------------------------------------------------------- *@
+    @* -------------------------------------------- USUARIO ADMIN -------------------------------------------- *@
+    @* ------------------------------------------------------------------------------------------------------- *@
+    @if (Session["Usuario"] != null && Session["Rol"].Equals("Admin"))
+    {
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm sticky-top navbar-dark">
+            <div class="container d-flex align-items-center">
+
+                <a class="navbar-brand" href="@Url.Action("Dashboard", "Home")">
+                    <img src="~/Content/Img/Logo.png" alt="Logo" width="30" class="d-inline-block align-text-top">
+                    MusicWorld
+                </a>
+
+
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="collapse navbar-collapse justify-content-center">
+
+                    <ul class="navbar-nav mx-auto">
+                        <li>@Html.ActionLink("Inicio", "Dashboard", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Mis datos", "Details", "Usuarios", new { id = Session["UsuarioId"], area = "" }, new { @class = "nav-link" })</li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Gestionar</a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Artistas", "Index", "Artistas", null, new { @class = "dropdown-item" })</li>
+                                <li>@Html.ActionLink("Albumes", "Index", "Albumes", null, new { @class = "dropdown-item" })</li>
+                                <li>@Html.ActionLink("Generos", "Index", "Generos", null, new { @class = "dropdown-item" })</li>
+                                <li>@Html.ActionLink("Canciones", "Index", "Canciones", null, new { @class = "dropdown-item" })</li>
+                                <li>@Html.ActionLink("Usuarios", "Index", "Usuarios", null, new { @class = "dropdown-item" })</li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Ventas</a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Ventas", "Index", "Ventas", null, new { @class = "dropdown-item" })</li>
+                                <li>@Html.ActionLink("Detalles de venta", "Index", "DetallesVentas", null, new { @class = "dropdown-item" })</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+
+                    <ul class="navbar-nav ms-auto d-flex align-items-center">
+                        <li class="nav-item d-flex align-items-center">
+                            <span class="navbar-text text-white ms-2">
+                                Usuario: @Session["Usuario"]
+                            </span>
+                            @*<span class="navbar-text text-white ms-2">
+                                    Rol: @Session["Rol"]
+                                </span>*@
+                        </li>
+                        <li class="nav-item ms-2">
+                            @Html.ActionLink("Cerrar Sesión", "Logout", "Usuarios", null, new { @class = "btn btn-outline-light" })
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+
+
+    }
+
+
+    @* ---------------------------------------------------------------------------------------------------------- *@
+    @* -------------------------------------------- USUARIO CONTADOR -------------------------------------------- *@
+    @* ---------------------------------------------------------------------------------------------------------- *@
+    @if (Session["Usuario"] != null && Session["Rol"].Equals("Contabilidad"))
+    {
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm sticky-top navbar-dark">
+            <div class="container d-flex align-items-center">
+                <a class="navbar-brand" href="@Url.Action("Dashboard", "Home")">
+                    <img src="~/Content/Img/Logo.png" alt="Logo" width="30" class="d-inline-block align-text-top">
+                    MusicWorld
+                </a>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Alternar navegación" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-center">
+                    <ul class="navbar-nav mx-auto">
+                        <li>@Html.ActionLink("Inicio", "Dashboard", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Mis datos", "Details", "Usuarios", new { id = Session["UsuarioId"], area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Ventas", "Index", "Ventas", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Detalles de venta", "Index", "DetallesVentas", new { area = "" }, new { @class = "nav-link" })</li>
+
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto d-flex align-items-center">
+                        <li class="nav-item d-flex align-items-center">
+                            <span class="navbar-text text-white ms-2">
+                                Usuario: @Session["Usuario"]
+                            </span>
+                            @*<span class="navbar-text text-white ms-2">
+                                    Rol: @Session["Rol"]
+                                </span>*@
+                        </li>
+                        <li class="nav-item ms-2">
+                            @Html.ActionLink("Cerrar Sesión", "Logout", "Usuarios", null, new { @class = "btn btn-outline-light" })
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+    }
+
+
+    @* --------------------------------------------------------------------------------------------------------- *@
+    @* -------------------------------------------- USUARIO USUARIO -------------------------------------------- *@
+    @* --------------------------------------------------------------------------------------------------------- *@
+    @if (Session["Usuario"] != null && Session["Rol"].Equals("Usuario"))
+    {
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm sticky-top navbar-dark">
+            <div class="container d-flex align-items-center">
+                <a class="navbar-brand" href="@Url.Action("Dashboard", "Home")">
+                    <img src="~/Content/Img/Logo.png" alt="Logo" width="30" class="d-inline-block align-text-top">
+                    MusicWorld
+                </a>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Alternar navegación" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-center">
+                    <ul class="navbar-nav mx-auto">
+                        <li>@Html.ActionLink("Inicio", "Dashboard", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Mis datos", "Details", "Usuarios", new { id = Session["UsuarioId"], area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Canciones", "Index", "Canciones", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Mi Carrito", "Index", "Carrito", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Mis compras", "Index", "Ventas", new { area = "" }, new { @class = "nav-link" })</li>
+                        @* ---------------------------Cuantas canciones tiene----------------------------------------------- *@
+                        @{
+                            var carrito = Session["Carrito"] as List<VentaMusical.Models.ViewModels.Carritos.CarritoItem>;
+                            int cantidad = carrito?.Sum(c => c.Cantidad) ?? 0;
+                        }
+
+                        @if (cantidad > 0)
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "Carrito")" class="nav-link text-white fw-bold">
+                                    🛒 Carrito (@cantidad)
+                                </a>
+                            </li>
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto d-flex align-items-center">
+                        <li class="nav-item d-flex align-items-center">
+                            <span class="navbar-text text-white ms-2">
+                                Usuario: @Session["Usuario"]
+                            </span>
+                            @*<span class="navbar-text text-white ms-2">
+                                    Rol: @Session["Rol"]
+                                </span>*@
+                        </li>
+                        <li class="nav-item ms-2">
+                            @Html.ActionLink("Cerrar Sesión", "Logout", "Usuarios", null, new { @class = "btn btn-outline-light" })
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+    }
+
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    <footer class="text-center">
+        <p>&copy; @DateTime.Now.Year Proyecto Final - Programación Avanzada - UAM</p>
+        <p>Grupo #1: Freddy Brandon, Raquel Sanabria, Fabio Gomez y Josué Sánchez</p>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @*@Scripts.Render("~/bundles/bootstrap")*@
+    @RenderSection("scripts", required: false)
+</body>
+</html>

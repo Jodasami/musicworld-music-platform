@@ -1,0 +1,141 @@
+﻿@model VentaMusical.Models.ViewModels.Canciones.DetallesCancion
+
+@{
+    ViewBag.Title = "Detalles de la canción";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalles de la canción</h2>
+<br />
+
+<div class="row">
+    @* ----------- Columna Izquierda -----------*@
+    <div class="col-md-6">
+        <div class="card shadow p-4 mb-4" style="background-color:#FDE2BA;">
+            <h4 class="mb-4 text-center">Información de la canción</h4>
+            <dl class="row">
+                <dt class="col-sm-5">Código</dt>
+                <dd class="col-sm-7">@Model.CodigoCancion</dd>
+
+                <dt class="col-sm-5">Nombre</dt>
+                <dd class="col-sm-7">@Model.NombreCancion</dd>
+
+                <dt class="col-sm-5">Género</dt>
+                <dd class="col-sm-7">@Model.NombreGenero (Cod: @Model.CodigoGenero)</dd>
+
+                <dt class="col-sm-5">Precio</dt>
+                <dd class="col-sm-7">@Model.Precio</dd>
+
+                <dt class="col-sm-5">Cantidad Disponible</dt>
+                <dd class="col-sm-7">@Model.CantidadDisponible</dd>
+
+            </dl>
+        </div>
+        <div class="card shadow-sm p-4 mb-4" style="background-color: #AD6603; color:white ">
+            <h4 class="mb-4 text-center">Información del álbum</h4>
+
+            @if (!string.IsNullOrEmpty(Model.ImagenAlbum))
+            {
+                <div class="text-center mb-4">
+                    <img src="@Model.ImagenAlbum" class="img-fluid rounded shadow" style="max-height: 250px;" alt="Portada del álbum" />
+                </div>
+            }
+
+            <dl class="row">
+                <dt class="col-sm-5">Nombre Álbum</dt>
+                <dd class="col-sm-7">@Model.NombreAlbum</dd>
+
+                <dt class="col-sm-5">Año de lanzamiento</dt>
+                <dd class="col-sm-7">@Model.Anno</dd>
+            </dl>
+
+        </div>
+    </div>
+
+    @* ----------- Columna derecha -----------*@
+    <div class="col-md-6">
+        <div class="card shadow p-4 mb-4" style="background-color:black; color:white">
+            <h4 class="mb-4 text-center">Información del artista</h4>
+
+            <dl class="row">
+                @if (!string.IsNullOrEmpty(Model.Foto))
+                {
+                    <div class="text-center mb-4 ">
+                        <img src="@Model.Foto" class="img-fluid rounded shadow" style="max-height: 400px;" alt="Foto del artista" />
+                    </div>
+                }
+
+
+                <dt class="col-sm-5">Nombre Artístico</dt>
+                <dd class="col-sm-7">@Model.NombreArtistico</dd>
+
+                <dt class="col-sm-5">Nombre Real</dt>
+                <dd class="col-sm-7">@Model.NombreReal</dd>
+
+                <dt class="col-sm-5">Nacimiento</dt>
+                <dd class="col-sm-7">@Model.FechaNacimiento</dd>
+
+                <dt class="col-sm-5">Nacionalidad</dt>
+                <dd class="col-sm-7">@Model.Nacionalidad</dd>
+
+                <dt class="col-sm-5">Biografía</dt>
+                <dd class="col-sm-7">
+                    @if (!string.IsNullOrEmpty(Model.LinkBiografia))
+                    {
+                        <a href="@Model.LinkBiografia" target="_blank">Ver Biografía</a>
+                    }
+                    else
+                    {
+                        <span>Sin biografía</span>
+                    }
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+    @* ----------- Reproductor -----------*@
+
+    @{
+        string Altura = "480";
+        if (Model.LinkVideo.Contains("spotify"))
+        {
+            Altura = "152";
+        }
+    }
+    <div class="col-md-12">
+        <div class="card shadow p-4  mb-4" style="background-color: #FDE2BA;">
+            <h4 class="mb-4 text-center">Reproducir la canción</h4>
+
+            <iframe src="@Model.LinkVideo"
+                    title="Muestra de la canción"
+                    frameborder="0"
+                    width="100%"
+                    height="@Altura"
+                    allowfullscreen
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy">
+            </iframe>
+
+        </div>
+    </div>
+
+
+
+    <div class="text-center mt-4">
+        @if (Session["Usuario"] != null && Session["Rol"].Equals("Usuario"))
+        {
+            using (Html.BeginForm("Agregar", "Carrito", FormMethod.Post, new { @class = "d-inline-flex align-items-center mt-2" }))
+            {
+                @Html.Hidden("codigoCancion", Model.CodigoCancion)
+                <input type="number" name="cantidad" value="1" min="1" max="@Model.CantidadDisponible"
+                       class="form-control form-control-sm me-2" style="width: 60px;" />
+                <button type="submit" class="btn btnCreate btn-lg w-100">🛒 Comprar</button>
+                    }
+        } else
+         {
+            <a href = "@Url.Action("Edit", new { id = Model.CodigoCancion })" class="btn btn-primary btn-lg">Editar</a>
+        }
+
+    <a href="@Url.Action("Index")" class="btn btn-secondary btn-lg ms-2">Volver al listado</a>
+    </div>
+</div>

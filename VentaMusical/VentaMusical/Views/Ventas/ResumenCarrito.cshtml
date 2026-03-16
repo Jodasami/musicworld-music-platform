@@ -1,0 +1,59 @@
+﻿@model VentaMusical.Models.ViewModels.DTOs.ResumenCarritoDTO
+
+@{
+    ViewBag.Title = "Resumen del Carrito";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Resumen del Carrito</h2>
+
+@if (Model == null || Model.Productos == null || !Model.Productos.Any())
+{
+    <div class="alert alert-warning">
+        No se pudo cargar el resumen del carrito o está vacío.
+    </div>
+}
+else
+{
+<div class="card shadow p-4 mb-4" style="background-color:white;">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Productos)
+            {
+                <tr>
+                    <td>@item.Nombre</td>
+                    <td>@item.Cantidad</td>
+                    <td>@item.PrecioUnitario.ToString("C")</td>
+                    <td>@(item.Cantidad * item.PrecioUnitario).ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <hr />
+
+    <p><strong>Tipo de pago seleccionado:</strong> @Model.TipoPago</p>
+    <p><strong>Recargo aplicado:</strong> @Model.Recargo.ToString("C")</p>
+    <p><strong>Total a pagar:</strong> @Model.TotalFinal.ToString("C")</p>
+
+    <form method="post" action="@Url.Action("ConfirmarCompra", "Ventas")">
+        <input type="hidden" name="TipoPago" value="@Model.TipoPago" />
+        <button type="submit" class="btn btn-success">Confirmar Compra</button>
+    </form>
+</div>
+   
+}
+else
+{
+<div class="alert alert-warning">
+    No hay productos en el carrito.
+</div>
+}

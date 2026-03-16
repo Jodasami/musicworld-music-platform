@@ -1,0 +1,43 @@
+﻿@model VentaMusical.Models.ViewModels.DetallesVentas.DetalleVentaViewModel
+@{
+    ViewBag.Title = "Detalle de la Venta";
+}
+
+<h2>Detalle de la Venta</h2>
+
+@if (Model != null)
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong><i class="fa fa-file-text-o"></i> Factura Nº:</strong> @Model.NumeroFactura
+        </div>
+        <div class="panel-body">
+            <dl class="dl-horizontal">
+                <dt>Código Canción</dt>
+                <dd>@Model.CodigoCancion</dd>
+
+                <dt>Nombre Canción</dt>
+                <dd>@Model.NombreCancion</dd>
+
+                <dt>Cantidad</dt>
+                <dd>@Model.Cantidad</dd>
+
+                <dt>Precio Unitario</dt>
+                <dd>₡@Model.PrecioUnitario.ToString("N2")</dd>
+
+                <dt>Subtotal</dt>
+                <dd>₡@Model.Subtotal.ToString("N2")</dd>
+            </dl>
+
+            <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                <i class="fa fa-arrow-left"></i> Volver al listado
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        No se encontró el detalle solicitado.
+    </div>
+}

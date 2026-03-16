@@ -1,0 +1,44 @@
+﻿@model IEnumerable<VentaMusical.Models.Artistas>
+
+@{
+    ViewBag.Title = "Lista de Artistas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+<br />
+
+<div class="row mb-3">
+    <div class="col-auto">
+        <input type="button" class="btn btnCreate"
+               value="Crear Nuevo Artista"
+               onclick="document.location.href='@Url.Action("Create", "Artistas")'" />
+    </div>
+</div>
+
+<table class="table table-striped table-bordered text-center custom-table">
+    <thead class="table-dark">
+        <tr>
+            <th>Nombre Artístico</th>
+            <th>Nombre Real</th>
+            <th>Nacionalidad</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.NombreArtistico</td>
+                <td>@item.NombreReal</td>
+                <td>@item.Nacionalidad</td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.CodigoArtista }, new { @class = "btn btnEdit btn-sm" })
+                    @Html.ActionLink("Detalles", "Details", new { id = item.CodigoArtista }, new { @class = "btn btnDetails btn-sm" })
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.CodigoArtista }, new { @class = "btn btnDelete btn-sm" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

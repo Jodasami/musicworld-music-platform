@@ -1,0 +1,56 @@
+﻿@model VentaMusical.Models.ViewModels.Ventas.Venta
+
+<div class="container my-5">
+    <div class="card shadow-lg border-0 rounded-4 p-4">
+        <div class="card-body">
+            <h3 class="text-center mb-4 text-success">Factura #@Model.NumeroFactura</h3>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <p><strong>Fecha:</strong> @Model.FechaCompra.ToShortDateString()</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p><strong>Usuario:</strong> @Model.IDUsuario</p>
+                </div>
+            </div>
+
+            <table class="table table-bordered align-middle">
+                <tbody>
+                    <tr>
+                        <th scope="row" style="width: 50%;">Tipo de Pago</th>
+                        <td>@Model.TipoPago</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Subtotal</th>
+                        <td>₡@Model.TotalSinIVA</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">IVA (13%)</th>
+                        <td>₡@Model.IVA</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Recargo por Tarjeta</th>
+                        <td>₡@Model.RecargoTarjeta</td>
+                    </tr>
+                    <tr class="table-success">
+                        <th scope="row">Total Final</th>
+                        <td><strong>₡@Model.TotalFinal</strong></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Crédito Usado</th>
+                        <td>₡@Model.MontoCreditoUsado</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Crédito Restante</th>
+                        <td>₡@Model.MontoRestante</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="text-center mt-4">
+                <button class="btn btn-success px-4">Descargar PDF</button>
+                <button class="btn btn-outline-secondary px-4 ms-2">Volver</button>
+            </div>
+        </div>
+    </div>
+</div>

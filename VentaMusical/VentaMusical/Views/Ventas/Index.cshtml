@@ -1,0 +1,150 @@
+﻿@model IEnumerable<VentaMusical.Models.ViewModels.Ventas.ListarVentas>
+
+@{
+    ViewBag.Title = "Listado de Ventas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Listado de Ventas</h2>
+<br />
+
+<!-- Mensajes visuales -->
+@if (ViewBag.ValorMensaje == 1)
+{
+    <div class="alert alert-success text-center">
+        @ViewBag.MensajeProceso
+    </div>
+}
+else if (ViewBag.ValorMensaje == 0)
+{
+    <div class="alert alert-danger text-center">
+        @ViewBag.MensajeProceso
+    </div>
+}
+
+<!-- Filtros superiores -->
+@using (Html.BeginForm("Index", "Ventas", FormMethod.Get))
+{
+    <div class="row mb-3">
+        <div class="col-md-2">
+            <label>Factura / Cliente</label>
+            @Html.TextBox("busquedaFactura", Request.QueryString["busquedaFactura"], new { @class = "form-control", placeholder = "Buscar..." })
+        </div>
+
+        <div class="col-md-2">
+            <label>Estado</label>
+            <select name="estado" class="form-control">
+                <option value="">-- Todos --</option>
+                <option @(Request.QueryString["estado"] == "Completada" ? "selected" : "")>Completada</option>
+                <option @(Request.QueryString["estado"] == "Pendiente" ? "selected" : "")>Pendiente</option>
+                <option @(Request.QueryString["estado"] == "Cancelada" ? "selected" : "")>Cancelada</option>
+                <option @(Request.QueryString["estado"] == "Revertida" ? "selected" : "")>Revertida</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <label>Pago</label>
+            <select name="tipoPago" class="form-control">
+                <option value="">-- Todos --</option>
+                <option value="Tarjeta" @(Request.QueryString["tipoPago"] == "Tarjeta" ? "selected" : "")>Tarjeta</option>
+                <option value="PayPal" @(Request.QueryString["tipoPago"] == "PayPal" ? "selected" : "")>PayPal</option>
+                <option value="Transferencia" @(Request.QueryString["tipoPago"] == "Transferencia" ? "selected" : "")>Transferencia</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <label>Desde</label>
+            <input type="date" name="desde" value="@Request.QueryString["desde"]" class="form-control" />
+        </div>
+
+        <div class="col-md-2">
+            <label>Hasta</label>
+            <input type="date" name="hasta" value="@Request.QueryString["hasta"]" class="form-control" />
+        </div>
+
+        <div class="col-md-2 align-self-end">
+            <input type="submit" value="Filtrar" class="btn btnCreate w-100" />
+        </div>
+    </div>
+}
+
+<!-- Botón Crear nueva venta -->
+@if (Session["Usuario"] != null && Session["Rol"].Equals("Admin"))
+{
+    <div class="mb-3 text-end">
+        <input type="button" class="btn btnCreate" value="➕ Registrar nueva venta"
+               onclick="document.location.href='@Url.Action("Create", "Ventas")'" />
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center">
+        No hay ventas registradas actualmente.
+    </div>
+}
+else
+{
+    <table class="table table-striped table-bordered text-center custom-table">
+        <thead class="table-dark">
+            <tr>
+                <th>Factura</th>
+                <th>Usuario</th>
+                <th>Fecha</th>
+                <th>Total</th>
+                <th>Pago</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var venta in Model)
+            {
+                var badgeClass = venta.Estado == "Completada" ? "success" :
+                                 venta.Estado == "Pendiente" ? "warning" :
+                                 venta.Estado == "Cancelada" ? "danger" :
+                                 venta.Estado == "Revertida" ? "info" : "secondary";
+
+                <tr>
+                    <td>@venta.NumeroFactura</td>
+                    <td>@venta.NombreUsuario</td>
+                    <td>@venta.FechaCompra.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>₡@venta.TotalFinal.ToString("N2")</td>
+                    <td>
+                        @venta.TipoPago
+                        @if (venta.TipoPago == "Tarjeta")
+                        {<i class="glyphicon glyphicon-credit-card" title="Pago con tarjeta"></i>}
+                        @if (venta.TipoPago == "PayPal")
+                        {<i class="glyphicon glyphicon-globe" title="Pago con PayPal"></i>}
+                        @if (venta.TipoPago == "Transferencia")
+                        {<i class="glyphicon glyphicon-transfer" title="Pago con transferencia"></i>}
+                    </td>
+                    <td><span class="badge bg-@badgeClass">@venta.Estado</span></td>
+                    <td>
+                        <a href="@Url.Action("Details", new { id = venta.NumeroFactura })" class="btn btnDetails btn-sm">📄 Detalles</a>
+                        @if (Session["Usuario"] != null && Session["Rol"].Equals("Admin"))
+                        {
+                            
+                            @*<a href="@Url.Action("Edit", new { id = venta.NumeroFactura })" class="btn btnEdit btn-sm">✏️ Editar</a>
+                            <a href="@Url.Action("Delete", new { id = venta.NumeroFactura })" class="btn btnDelete btn-sm"
+                               onclick="return confirm('¿Confirmás la eliminación de la venta?')">🗑️ Eliminar</a>*@
+
+                            if ((DateTime.Now - venta.FechaCompra).TotalHours <= 24 && venta.Estado == "Completada")
+                            {
+                                <a href="@Url.Action("Reversar", new { id = venta.NumeroFactura })" class="btn btn-warning btn-sm">⏪ Reversar</a>
+                            }
+                        }
+
+                        <a href="@Url.Action("EnviarFactura", new { id = venta.NumeroFactura })" class="btn btn-primary btn-sm">📧 Enviar factura</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3"><strong>Total general:</strong></td>
+                <td colspan="4">₡@Model.Sum(v => v.TotalFinal).ToString("N2")</td>
+            </tr>
+        </tfoot>
+    </table>
+}

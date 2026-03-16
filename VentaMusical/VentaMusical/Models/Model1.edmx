@@ -1,0 +1,902 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="VentaMusicalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Albumes">
+          <Key>
+            <PropertyRef Name="CodigoAlbum" />
+          </Key>
+          <Property Name="CodigoAlbum" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodigoArtista" Type="int" Nullable="false" />
+          <Property Name="NombreAlbum" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="AnoLanzamiento" Type="int" Nullable="false" />
+          <Property Name="Imagen" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Artistas">
+          <Key>
+            <PropertyRef Name="CodigoArtista" />
+          </Key>
+          <Property Name="CodigoArtista" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NombreArtistico" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="FechaNacimiento" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="NombreReal" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Nacionalidad" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Foto" Type="varchar(max)" Nullable="false" />
+          <Property Name="LinkBiografia" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Auditoria">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FechaRegistro" Type="datetime" Nullable="false" />
+          <Property Name="Usuario" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Accion" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="TablaAfectada" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="IDRegistroAfectado" Type="int" Nullable="false" />
+          <Property Name="Detalles" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="IPUsuario" Type="varchar" MaxLength="35" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Canciones">
+          <Key>
+            <PropertyRef Name="CodigoCancion" />
+          </Key>
+          <Property Name="CodigoCancion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodigoGenero" Type="int" Nullable="false" />
+          <Property Name="CodigoAlbum" Type="int" Nullable="false" />
+          <Property Name="NombreCancion" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="LinkVideo" Type="varchar(max)" Nullable="false" />
+          <Property Name="Precio" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="CantidadDisponible" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DetalleVenta">
+          <Key>
+            <PropertyRef Name="IDDetalle" />
+          </Key>
+          <Property Name="IDDetalle" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NumeroFactura" Type="int" Nullable="false" />
+          <Property Name="CodigoCancion" Type="int" Nullable="false" />
+          <Property Name="Subtotal" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="NombreCancion" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="PrecioUnitario" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Cantidad" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Generos">
+          <Key>
+            <PropertyRef Name="CodigoGenero" />
+          </Key>
+          <Property Name="CodigoGenero" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NumeroIdentificacion" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Apellido" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Genero" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="CorreoElectronico" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="TipoTarjeta" Type="nvarchar" MaxLength="25" Nullable="false" />
+          <Property Name="DineroDisponible" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="NumeroTarjeta" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="Contrasena" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Perfil" Type="nvarchar" MaxLength="25" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Ventas">
+          <Key>
+            <PropertyRef Name="NumeroFactura" />
+          </Key>
+          <Property Name="NumeroFactura" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDUsuario" Type="int" Nullable="false" />
+          <Property Name="FechaCompra" Type="datetime" Nullable="false" />
+          <Property Name="TipoPago" Type="nvarchar" MaxLength="25" Nullable="false" />
+          <Property Name="TotalSinIVA" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="IVA" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="RecargoTarjeta" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="TotalFinal" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="CodigoTarjeta" Type="varchar" MaxLength="4" />
+          <Property Name="MontoCreditoUsado" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="MontoRestante" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Estado" Type="nvarchar" MaxLength="20" />
+          <Property Name="EnviadaPorCorreo" Type="bit" />
+          <Property Name="TotalConCredito" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="FechaEnvioCorreo" Type="datetime" />
+        </EntityType>
+        <Association Name="FK__Albumes__CodigoA__398D8EEE">
+          <End Role="Artistas" Type="Self.Artistas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Albumes" Type="Self.Albumes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artistas">
+              <PropertyRef Name="CodigoArtista" />
+            </Principal>
+            <Dependent Role="Albumes">
+              <PropertyRef Name="CodigoArtista" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Canciones__Codig__3A81B327">
+          <End Role="Generos" Type="Self.Generos" Multiplicity="1" />
+          <End Role="Canciones" Type="Self.Canciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Generos">
+              <PropertyRef Name="CodigoGenero" />
+            </Principal>
+            <Dependent Role="Canciones">
+              <PropertyRef Name="CodigoGenero" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Canciones__Codig__3B75D760">
+          <End Role="Albumes" Type="Self.Albumes" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Canciones" Type="Self.Canciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Albumes">
+              <PropertyRef Name="CodigoAlbum" />
+            </Principal>
+            <Dependent Role="Canciones">
+              <PropertyRef Name="CodigoAlbum" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleVe__Codig__3C69FB99">
+          <End Role="Canciones" Type="Self.Canciones" Multiplicity="1" />
+          <End Role="DetalleVenta" Type="Self.DetalleVenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Canciones">
+              <PropertyRef Name="CodigoCancion" />
+            </Principal>
+            <Dependent Role="DetalleVenta">
+              <PropertyRef Name="CodigoCancion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleVe__Numer__3D5E1FD2">
+          <End Role="Ventas" Type="Self.Ventas" Multiplicity="1" />
+          <End Role="DetalleVenta" Type="Self.DetalleVenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ventas">
+              <PropertyRef Name="NumeroFactura" />
+            </Principal>
+            <Dependent Role="DetalleVenta">
+              <PropertyRef Name="NumeroFactura" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ventas__IDUsuari__3E52440B">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Ventas" Type="Self.Ventas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Ventas">
+              <PropertyRef Name="IDUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="VentaMusicalModelStoreContainer">
+          <EntitySet Name="Albumes" EntityType="Self.Albumes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Artistas" EntityType="Self.Artistas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Auditoria" EntityType="Self.Auditoria" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Canciones" EntityType="Self.Canciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DetalleVenta" EntityType="Self.DetalleVenta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Generos" EntityType="Self.Generos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ventas" EntityType="Self.Ventas" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Albumes__CodigoA__398D8EEE" Association="Self.FK__Albumes__CodigoA__398D8EEE">
+            <End Role="Artistas" EntitySet="Artistas" />
+            <End Role="Albumes" EntitySet="Albumes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Canciones__Codig__3A81B327" Association="Self.FK__Canciones__Codig__3A81B327">
+            <End Role="Generos" EntitySet="Generos" />
+            <End Role="Canciones" EntitySet="Canciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Canciones__Codig__3B75D760" Association="Self.FK__Canciones__Codig__3B75D760">
+            <End Role="Albumes" EntitySet="Albumes" />
+            <End Role="Canciones" EntitySet="Canciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleVe__Codig__3C69FB99" Association="Self.FK__DetalleVe__Codig__3C69FB99">
+            <End Role="Canciones" EntitySet="Canciones" />
+            <End Role="DetalleVenta" EntitySet="DetalleVenta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleVe__Numer__3D5E1FD2" Association="Self.FK__DetalleVe__Numer__3D5E1FD2">
+            <End Role="Ventas" EntitySet="Ventas" />
+            <End Role="DetalleVenta" EntitySet="DetalleVenta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ventas__IDUsuari__3E52440B" Association="Self.FK__Ventas__IDUsuari__3E52440B">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Ventas" EntitySet="Ventas" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="VentaMusicalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Albumes">
+          <Key>
+            <PropertyRef Name="CodigoAlbum" />
+          </Key>
+          <Property Name="CodigoAlbum" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodigoArtista" Type="Int32" Nullable="false" />
+          <Property Name="NombreAlbum" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AnoLanzamiento" Type="Int32" Nullable="false" />
+          <Property Name="Imagen" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Artistas" Relationship="Self.FK__Albumes__CodigoA__2B3F6F97" FromRole="Albumes" ToRole="Artistas" />
+          <NavigationProperty Name="Canciones" Relationship="Self.FK__Canciones__Codig__2F10007B" FromRole="Albumes" ToRole="Canciones" />
+        </EntityType>
+        <EntityType Name="Artistas">
+          <Key>
+            <PropertyRef Name="CodigoArtista" />
+          </Key>
+          <Property Name="CodigoArtista" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NombreArtistico" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FechaNacimiento" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NombreReal" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nacionalidad" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Foto" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LinkBiografia" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Albumes" Relationship="Self.FK__Albumes__CodigoA__2B3F6F97" FromRole="Artistas" ToRole="Albumes" />
+        </EntityType>
+        <EntityType Name="Auditoria">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FechaRegistro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Usuario" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Accion" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TablaAfectada" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IDRegistroAfectado" Type="Int32" Nullable="false" />
+          <Property Name="Detalles" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IPUsuario" Type="String" MaxLength="35" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Canciones">
+          <Key>
+            <PropertyRef Name="CodigoCancion" />
+          </Key>
+          <Property Name="CodigoCancion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodigoGenero" Type="Int32" Nullable="false" />
+          <Property Name="CodigoAlbum" Type="Int32" Nullable="false" />
+          <Property Name="NombreCancion" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LinkVideo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Precio" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="CantidadDisponible" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Albumes" Relationship="Self.FK__Canciones__Codig__2F10007B" FromRole="Canciones" ToRole="Albumes" />
+          <NavigationProperty Name="Generos" Relationship="Self.FK__Canciones__Codig__2E1BDC42" FromRole="Canciones" ToRole="Generos" />
+          <NavigationProperty Name="DetalleVenta" Relationship="Self.FK__DetalleVe__Codig__36B12243" FromRole="Canciones" ToRole="DetalleVenta" />
+        </EntityType>
+        <EntityType Name="DetalleVenta">
+          <Key>
+            <PropertyRef Name="IDDetalle" />
+          </Key>
+          <Property Name="IDDetalle" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NumeroFactura" Type="Int32" Nullable="false" />
+          <Property Name="CodigoCancion" Type="Int32" Nullable="false" />
+          <Property Name="Subtotal" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Canciones" Relationship="Self.FK__DetalleVe__Codig__36B12243" FromRole="DetalleVenta" ToRole="Canciones" />
+          <NavigationProperty Name="Ventas" Relationship="Self.FK__DetalleVe__Numer__35BCFE0A" FromRole="DetalleVenta" ToRole="Ventas" />
+          <Property Name="NombreCancion" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="PrecioUnitario" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="Cantidad" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Generos">
+          <Key>
+            <PropertyRef Name="CodigoGenero" />
+          </Key>
+          <Property Name="CodigoGenero" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Canciones" Relationship="Self.FK__Canciones__Codig__2E1BDC42" FromRole="Generos" ToRole="Canciones" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NumeroIdentificacion" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Apellido" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Genero" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CorreoElectronico" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TipoTarjeta" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DineroDisponible" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="NumeroTarjeta" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Contrasena" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Perfil" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Ventas" Relationship="Self.FK__Ventas__IDUsuari__32E0915F" FromRole="Usuarios" ToRole="Ventas" />
+        </EntityType>
+        <EntityType Name="Ventas">
+          <Key>
+            <PropertyRef Name="NumeroFactura" />
+          </Key>
+          <Property Name="NumeroFactura" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDUsuario" Type="Int32" Nullable="false" />
+          <Property Name="FechaCompra" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TipoPago" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="DetalleVenta" Relationship="Self.FK__DetalleVe__Numer__35BCFE0A" FromRole="Ventas" ToRole="DetalleVenta" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK__Ventas__IDUsuari__32E0915F" FromRole="Ventas" ToRole="Usuarios" />
+          <Property Name="TotalSinIVA" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="IVA" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="RecargoTarjeta" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="TotalFinal" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="CodigoTarjeta" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="MontoCreditoUsado" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="MontoRestante" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Estado" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="EnviadaPorCorreo" Type="Boolean" />
+          <Property Name="TotalConCredito" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="FechaEnvioCorreo" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK__Albumes__CodigoA__2B3F6F97">
+          <End Role="Artistas" Type="Self.Artistas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Albumes" Type="Self.Albumes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artistas">
+              <PropertyRef Name="CodigoArtista" />
+            </Principal>
+            <Dependent Role="Albumes">
+              <PropertyRef Name="CodigoArtista" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Canciones__Codig__2F10007B">
+          <End Role="Albumes" Type="Self.Albumes" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Canciones" Type="Self.Canciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Albumes">
+              <PropertyRef Name="CodigoAlbum" />
+            </Principal>
+            <Dependent Role="Canciones">
+              <PropertyRef Name="CodigoAlbum" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Canciones__Codig__2E1BDC42">
+          <End Role="Generos" Type="Self.Generos" Multiplicity="1" />
+          <End Role="Canciones" Type="Self.Canciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Generos">
+              <PropertyRef Name="CodigoGenero" />
+            </Principal>
+            <Dependent Role="Canciones">
+              <PropertyRef Name="CodigoGenero" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleVe__Codig__36B12243">
+          <End Role="Canciones" Type="Self.Canciones" Multiplicity="1" />
+          <End Role="DetalleVenta" Type="Self.DetalleVenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Canciones">
+              <PropertyRef Name="CodigoCancion" />
+            </Principal>
+            <Dependent Role="DetalleVenta">
+              <PropertyRef Name="CodigoCancion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleVe__Numer__35BCFE0A">
+          <End Role="Ventas" Type="Self.Ventas" Multiplicity="1" />
+          <End Role="DetalleVenta" Type="Self.DetalleVenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ventas">
+              <PropertyRef Name="NumeroFactura" />
+            </Principal>
+            <Dependent Role="DetalleVenta">
+              <PropertyRef Name="NumeroFactura" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ventas__IDUsuari__32E0915F">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Ventas" Type="Self.Ventas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Ventas">
+              <PropertyRef Name="IDUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="VentaMusicalEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Albumes" EntityType="Self.Albumes" />
+          <EntitySet Name="Artistas" EntityType="Self.Artistas" />
+          <EntitySet Name="Auditoria" EntityType="Self.Auditoria" />
+          <EntitySet Name="Canciones" EntityType="Self.Canciones" />
+          <EntitySet Name="DetalleVenta" EntityType="Self.DetalleVenta" />
+          <EntitySet Name="Generos" EntityType="Self.Generos" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" />
+          <EntitySet Name="Ventas" EntityType="Self.Ventas" />
+          <AssociationSet Name="FK__Albumes__CodigoA__2B3F6F97" Association="Self.FK__Albumes__CodigoA__2B3F6F97">
+            <End Role="Artistas" EntitySet="Artistas" />
+            <End Role="Albumes" EntitySet="Albumes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Canciones__Codig__2F10007B" Association="Self.FK__Canciones__Codig__2F10007B">
+            <End Role="Albumes" EntitySet="Albumes" />
+            <End Role="Canciones" EntitySet="Canciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Canciones__Codig__2E1BDC42" Association="Self.FK__Canciones__Codig__2E1BDC42">
+            <End Role="Generos" EntitySet="Generos" />
+            <End Role="Canciones" EntitySet="Canciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleVe__Codig__36B12243" Association="Self.FK__DetalleVe__Codig__36B12243">
+            <End Role="Canciones" EntitySet="Canciones" />
+            <End Role="DetalleVenta" EntitySet="DetalleVenta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleVe__Numer__35BCFE0A" Association="Self.FK__DetalleVe__Numer__35BCFE0A">
+            <End Role="Ventas" EntitySet="Ventas" />
+            <End Role="DetalleVenta" EntitySet="DetalleVenta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ventas__IDUsuari__32E0915F" Association="Self.FK__Ventas__IDUsuari__32E0915F">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Ventas" EntitySet="Ventas" />
+          </AssociationSet>
+          <FunctionImport Name="EditarDetalleVenta">
+            <Parameter Name="IDDetalle" Mode="In" Type="Int32" />
+            <Parameter Name="NumeroFactura" Mode="In" Type="Int32" />
+            <Parameter Name="CodigoCancion" Mode="In" Type="Int32" />
+            <Parameter Name="Subtotal" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="EditarGenero">
+            <Parameter Name="CodigoGenero" Mode="In" Type="Int32" />
+            <Parameter Name="NuevaDescripcion" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="EliminarDetalleVenta">
+          <Parameter Name="IDDetalle" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="EliminarGenero">
+          <Parameter Name="CodigoGenero" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarDetalleVenta">
+            <Parameter Name="NumeroFactura" Mode="In" Type="Int32" />
+            <Parameter Name="CodigoCancion" Mode="In" Type="Int32" />
+            <Parameter Name="Subtotal" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarGenero">
+          <Parameter Name="Descripcion" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ListaGeneros" ReturnType="Collection(VentaMusicalModel.ListaGeneros_Result)" />
+          <FunctionImport Name="ListarDetalleVenta" ReturnType="Collection(VentaMusicalModel.ListarDetalleVenta_Result)" />
+          <FunctionImport Name="spActualizarAlbum">
+            <Parameter Name="CodigoAlbum" Mode="In" Type="Int32" />
+            <Parameter Name="CodigoArtista" Mode="In" Type="Int32" />
+            <Parameter Name="NombreAlbum" Mode="In" Type="String" />
+            <Parameter Name="AnoLanzamiento" Mode="In" Type="Int32" />
+            <Parameter Name="Imagen" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spActualizarArtista">
+            <Parameter Name="CodigoArtista" Mode="In" Type="Int32" />
+            <Parameter Name="NombreArtistico" Mode="In" Type="String" />
+            <Parameter Name="FechaNacimiento" Mode="In" Type="String" />
+            <Parameter Name="NombreReal" Mode="In" Type="String" />
+            <Parameter Name="Nacionalidad" Mode="In" Type="String" />
+            <Parameter Name="Foto" Mode="In" Type="String" />
+            <Parameter Name="LinkBiografia" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spActualizarCancion">
+            <Parameter Name="CodigoCancion" Mode="In" Type="Int32" />
+            <Parameter Name="CodigoGenero" Mode="In" Type="Int32" />
+            <Parameter Name="CodigoAlbum" Mode="In" Type="Int32" />
+            <Parameter Name="NombreCancion" Mode="In" Type="String" />
+            <Parameter Name="LinkVideo" Mode="In" Type="String" />
+            <Parameter Name="Precio" Mode="In" Type="Decimal" />
+            <Parameter Name="CantidadDisponible" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spActualizarUsuario">
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+            <Parameter Name="NumeroIdentificacion" Mode="In" Type="String" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Apellido" Mode="In" Type="String" />
+            <Parameter Name="Genero" Mode="In" Type="String" />
+            <Parameter Name="CorreoElectronico" Mode="In" Type="String" />
+            <Parameter Name="TipoTarjeta" Mode="In" Type="String" />
+            <Parameter Name="DineroDisponible" Mode="In" Type="Decimal" />
+            <Parameter Name="NumeroTarjeta" Mode="In" Type="String" />
+            <Parameter Name="Contrasena" Mode="In" Type="String" />
+            <Parameter Name="Perfil" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spAgregarArtista">
+            <Parameter Name="NombreArtistico" Mode="In" Type="String" />
+            <Parameter Name="FechaNacimiento" Mode="In" Type="String" />
+            <Parameter Name="NombreReal" Mode="In" Type="String" />
+            <Parameter Name="Nacionalidad" Mode="In" Type="String" />
+            <Parameter Name="Foto" Mode="In" Type="String" />
+            <Parameter Name="LinkBiografia" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spAgregarCancion">
+            <Parameter Name="CodigoGenero" Mode="In" Type="Int32" />
+            <Parameter Name="CodigoAlbum" Mode="In" Type="Int32" />
+            <Parameter Name="NombreCancion" Mode="In" Type="String" />
+            <Parameter Name="LinkVideo" Mode="In" Type="String" />
+            <Parameter Name="Precio" Mode="In" Type="Decimal" />
+            <Parameter Name="CantidadDisponible" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spAgregarUsuario">
+            <Parameter Name="NumeroIdentificacion" Mode="In" Type="String" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Apellido" Mode="In" Type="String" />
+            <Parameter Name="Genero" Mode="In" Type="String" />
+            <Parameter Name="CorreoElectronico" Mode="In" Type="String" />
+            <Parameter Name="TipoTarjeta" Mode="In" Type="String" />
+            <Parameter Name="DineroDisponible" Mode="In" Type="Decimal" />
+            <Parameter Name="NumeroTarjeta" Mode="In" Type="String" />
+            <Parameter Name="Contrasena" Mode="In" Type="String" />
+            <Parameter Name="Perfil" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spAgregarVenta">
+            <Parameter Name="IDUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="FechaCompra" Mode="In" Type="DateTime" />
+            <Parameter Name="Total" Mode="In" Type="Decimal" />
+            <Parameter Name="TipoPago" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spEliminarAlbum">
+          <Parameter Name="CodigoAlbum" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spEliminarArtista">
+          <Parameter Name="CodigoArtista" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spEliminarCancion">
+          <Parameter Name="CodigoCancion" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spEliminarUsuario">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spInsertarAlbum">
+            <Parameter Name="CodigoArtista" Mode="In" Type="Int32" />
+            <Parameter Name="NombreAlbum" Mode="In" Type="String" />
+            <Parameter Name="AnoLanzamiento" Mode="In" Type="Int32" />
+            <Parameter Name="Imagen" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spListarAlbumes" ReturnType="Collection(VentaMusicalModel.spListarAlbumes_Result)" />
+          <FunctionImport Name="spListarAlbumPorID" ReturnType="Collection(VentaMusicalModel.spListarAlbumPorID_Result)">
+          <Parameter Name="CodigoAlbum" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spMostrarArtistaPorId" ReturnType="Collection(VentaMusicalModel.spMostrarArtistaPorId_Result)">
+          <Parameter Name="CodigoArtista" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spMostrarAuditoria" ReturnType="Collection(VentaMusicalModel.spMostrarAuditoria_Result)" />
+          <FunctionImport Name="spMostrarAuditoriaPorFecha" ReturnType="Collection(VentaMusicalModel.spMostrarAuditoriaPorFecha_Result)">
+            <Parameter Name="FechaInicio" Mode="In" Type="DateTime" />
+            <Parameter Name="FechaFin" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="spMostrarAuditoriaPorTabla" ReturnType="Collection(VentaMusicalModel.spMostrarAuditoriaPorTabla_Result)">
+          <Parameter Name="TablaAfectada" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spMostrarCancionPorCodigo" ReturnType="Collection(VentaMusicalModel.spMostrarCancionPorCodigo_Result)">
+          <Parameter Name="CodigoCancion" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spMostrarTodasCanciones" ReturnType="Collection(VentaMusicalModel.spMostrarTodasCanciones_Result)" />
+          <FunctionImport Name="spMostrarTodosArtistas" ReturnType="Collection(VentaMusicalModel.spMostrarTodosArtistas_Result)" />
+          <FunctionImport Name="spMostrarTodosUsuarios" ReturnType="Collection(VentaMusicalModel.spMostrarTodosUsuarios_Result)" />
+          <FunctionImport Name="spMostrarUsuariosPorId" ReturnType="Collection(VentaMusicalModel.spMostrarUsuariosPorId_Result)">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spMostrarVentaPorId" ReturnType="Collection(VentaMusicalModel.spMostrarVentaPorId_Result)">
+          <Parameter Name="NumeroFactura" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spMostrarVentas" ReturnType="Collection(VentaMusicalModel.spMostrarVentas_Result)" />
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(VentaMusicalModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(VentaMusicalModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+        </EntityContainer>
+        <ComplexType Name="ListaGeneros_Result">
+          <Property Type="Int32" Name="CodigoGenero" Nullable="false" />
+          <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="ListarDetalleVenta_Result">
+          <Property Type="Int32" Name="IDDetalle" Nullable="false" />
+          <Property Type="Int32" Name="NumeroFactura" Nullable="false" />
+          <Property Type="Int32" Name="CodigoCancion" Nullable="false" />
+          <Property Type="Decimal" Name="Subtotal" Nullable="false" Precision="10" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="spListarAlbumes_Result">
+          <Property Type="Int32" Name="CodigoAlbum" Nullable="false" />
+          <Property Type="Int32" Name="CodigoArtista" Nullable="false" />
+          <Property Type="String" Name="NombreAlbum" Nullable="false" MaxLength="150" />
+          <Property Type="Int32" Name="AnoLanzamiento" Nullable="false" />
+          <Property Type="String" Name="Imagen" Nullable="false" MaxLength="150" />
+        </ComplexType>
+        <ComplexType Name="spListarAlbumPorID_Result">
+          <Property Type="Int32" Name="CodigoAlbum" Nullable="false" />
+          <Property Type="Int32" Name="CodigoArtista" Nullable="false" />
+          <Property Type="String" Name="NombreAlbum" Nullable="false" MaxLength="150" />
+          <Property Type="Int32" Name="AnoLanzamiento" Nullable="false" />
+          <Property Type="String" Name="Imagen" Nullable="false" MaxLength="150" />
+        </ComplexType>
+        <ComplexType Name="spMostrarArtistaPorId_Result">
+          <Property Type="Int32" Name="CodigoArtista" Nullable="false" />
+          <Property Type="String" Name="NombreArtistico" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="FechaNacimiento" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="NombreReal" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Nacionalidad" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Foto" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="LinkBiografia" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="spMostrarAuditoria_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="DateTime" Name="FechaRegistro" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Usuario" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Accion" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="TablaAfectada" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="IDRegistroAfectado" Nullable="false" />
+          <Property Type="String" Name="Detalles" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="IPUsuario" Nullable="false" MaxLength="35" />
+        </ComplexType>
+        <ComplexType Name="spMostrarAuditoriaPorFecha_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="DateTime" Name="FechaRegistro" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Usuario" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Accion" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="TablaAfectada" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="IDRegistroAfectado" Nullable="false" />
+          <Property Type="String" Name="Detalles" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="IPUsuario" Nullable="false" MaxLength="35" />
+        </ComplexType>
+        <ComplexType Name="spMostrarAuditoriaPorTabla_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="DateTime" Name="FechaRegistro" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Usuario" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Accion" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="TablaAfectada" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="IDRegistroAfectado" Nullable="false" />
+          <Property Type="String" Name="Detalles" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="IPUsuario" Nullable="false" MaxLength="35" />
+        </ComplexType>
+        <ComplexType Name="spMostrarCancionPorCodigo_Result">
+          <Property Type="Int32" Name="CodigoCancion" Nullable="false" />
+          <Property Type="Int32" Name="CodigoGenero" Nullable="false" />
+          <Property Type="Int32" Name="CodigoAlbum" Nullable="false" />
+          <Property Type="String" Name="NombreCancion" Nullable="false" MaxLength="150" />
+          <Property Type="String" Name="LinkVideo" Nullable="false" />
+          <Property Type="Decimal" Name="Precio" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="CantidadDisponible" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="spMostrarTodasCanciones_Result">
+          <Property Type="Int32" Name="CodigoCancion" Nullable="false" />
+          <Property Type="Int32" Name="CodigoGenero" Nullable="false" />
+          <Property Type="Int32" Name="CodigoAlbum" Nullable="false" />
+          <Property Type="String" Name="NombreCancion" Nullable="false" MaxLength="150" />
+          <Property Type="String" Name="LinkVideo" Nullable="false" />
+          <Property Type="Decimal" Name="Precio" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="CantidadDisponible" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="spMostrarTodosArtistas_Result">
+          <Property Type="Int32" Name="CodigoArtista" Nullable="false" />
+          <Property Type="String" Name="NombreArtistico" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="FechaNacimiento" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="NombreReal" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Nacionalidad" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Foto" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="LinkBiografia" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="spMostrarTodosUsuarios_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="NumeroIdentificacion" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Apellido" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Genero" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="CorreoElectronico" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="TipoTarjeta" Nullable="false" MaxLength="25" />
+          <Property Type="Decimal" Name="DineroDisponible" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="String" Name="NumeroTarjeta" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Contrasena" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Perfil" Nullable="false" MaxLength="25" />
+        </ComplexType>
+        <ComplexType Name="spMostrarUsuariosPorId_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="NumeroIdentificacion" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Apellido" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Genero" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="CorreoElectronico" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="TipoTarjeta" Nullable="false" MaxLength="25" />
+          <Property Type="Decimal" Name="DineroDisponible" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="String" Name="NumeroTarjeta" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Contrasena" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Perfil" Nullable="false" MaxLength="25" />
+        </ComplexType>
+        <ComplexType Name="spMostrarVentaPorId_Result">
+          <Property Type="Int32" Name="NumeroFactura" Nullable="false" />
+          <Property Type="Int32" Name="IDUsuario" Nullable="false" />
+          <Property Type="DateTime" Name="FechaCompra" Nullable="false" Precision="23" />
+          <Property Type="Decimal" Name="Total" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="String" Name="TipoPago" Nullable="false" MaxLength="25" />
+        </ComplexType>
+        <ComplexType Name="spMostrarVentas_Result">
+          <Property Type="Int32" Name="NumeroFactura" Nullable="false" />
+          <Property Type="Int32" Name="IDUsuario" Nullable="false" />
+          <Property Type="DateTime" Name="FechaCompra" Nullable="false" Precision="23" />
+          <Property Type="Decimal" Name="Total" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="String" Name="TipoPago" Nullable="false" MaxLength="25" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="VentaMusicalModelStoreContainer" CdmEntityContainer="VentaMusicalEntities">
+          <EntitySetMapping Name="Albumes">
+            <EntityTypeMapping TypeName="VentaMusicalModel.Albumes">
+              <MappingFragment StoreEntitySet="Albumes">
+                <ScalarProperty Name="CodigoAlbum" ColumnName="CodigoAlbum" />
+                <ScalarProperty Name="CodigoArtista" ColumnName="CodigoArtista" />
+                <ScalarProperty Name="NombreAlbum" ColumnName="NombreAlbum" />
+                <ScalarProperty Name="AnoLanzamiento" ColumnName="AnoLanzamiento" />
+                <ScalarProperty Name="Imagen" ColumnName="Imagen" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Artistas">
+            <EntityTypeMapping TypeName="VentaMusicalModel.Artistas">
+              <MappingFragment StoreEntitySet="Artistas">
+                <ScalarProperty Name="CodigoArtista" ColumnName="CodigoArtista" />
+                <ScalarProperty Name="NombreArtistico" ColumnName="NombreArtistico" />
+                <ScalarProperty Name="FechaNacimiento" ColumnName="FechaNacimiento" />
+                <ScalarProperty Name="NombreReal" ColumnName="NombreReal" />
+                <ScalarProperty Name="Nacionalidad" ColumnName="Nacionalidad" />
+                <ScalarProperty Name="Foto" ColumnName="Foto" />
+                <ScalarProperty Name="LinkBiografia" ColumnName="LinkBiografia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Auditoria">
+            <EntityTypeMapping TypeName="VentaMusicalModel.Auditoria">
+              <MappingFragment StoreEntitySet="Auditoria">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Accion" ColumnName="Accion" />
+                <ScalarProperty Name="TablaAfectada" ColumnName="TablaAfectada" />
+                <ScalarProperty Name="IDRegistroAfectado" ColumnName="IDRegistroAfectado" />
+                <ScalarProperty Name="Detalles" ColumnName="Detalles" />
+                <ScalarProperty Name="IPUsuario" ColumnName="IPUsuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Canciones">
+            <EntityTypeMapping TypeName="VentaMusicalModel.Canciones">
+              <MappingFragment StoreEntitySet="Canciones">
+                <ScalarProperty Name="CodigoCancion" ColumnName="CodigoCancion" />
+                <ScalarProperty Name="CodigoGenero" ColumnName="CodigoGenero" />
+                <ScalarProperty Name="CodigoAlbum" ColumnName="CodigoAlbum" />
+                <ScalarProperty Name="NombreCancion" ColumnName="NombreCancion" />
+                <ScalarProperty Name="LinkVideo" ColumnName="LinkVideo" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="CantidadDisponible" ColumnName="CantidadDisponible" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DetalleVenta">
+            <EntityTypeMapping TypeName="VentaMusicalModel.DetalleVenta">
+              <MappingFragment StoreEntitySet="DetalleVenta">
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="PrecioUnitario" ColumnName="PrecioUnitario" />
+                <ScalarProperty Name="NombreCancion" ColumnName="NombreCancion" />
+                <ScalarProperty Name="IDDetalle" ColumnName="IDDetalle" />
+                <ScalarProperty Name="NumeroFactura" ColumnName="NumeroFactura" />
+                <ScalarProperty Name="CodigoCancion" ColumnName="CodigoCancion" />
+                <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Generos">
+            <EntityTypeMapping TypeName="VentaMusicalModel.Generos">
+              <MappingFragment StoreEntitySet="Generos">
+                <ScalarProperty Name="CodigoGenero" ColumnName="CodigoGenero" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="VentaMusicalModel.Usuarios">
+              <MappingFragment StoreEntitySet="Usuarios">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NumeroIdentificacion" ColumnName="NumeroIdentificacion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Genero" ColumnName="Genero" />
+                <ScalarProperty Name="CorreoElectronico" ColumnName="CorreoElectronico" />
+                <ScalarProperty Name="TipoTarjeta" ColumnName="TipoTarjeta" />
+                <ScalarProperty Name="DineroDisponible" ColumnName="DineroDisponible" />
+                <ScalarProperty Name="NumeroTarjeta" ColumnName="NumeroTarjeta" />
+                <ScalarProperty Name="Contrasena" ColumnName="Contrasena" />
+                <ScalarProperty Name="Perfil" ColumnName="Perfil" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ventas">
+            <EntityTypeMapping TypeName="VentaMusicalModel.Ventas">
+              <MappingFragment StoreEntitySet="Ventas">
+                <ScalarProperty Name="FechaEnvioCorreo" ColumnName="FechaEnvioCorreo" />
+                <ScalarProperty Name="TotalConCredito" ColumnName="TotalConCredito" />
+                <ScalarProperty Name="EnviadaPorCorreo" ColumnName="EnviadaPorCorreo" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="MontoRestante" ColumnName="MontoRestante" />
+                <ScalarProperty Name="MontoCreditoUsado" ColumnName="MontoCreditoUsado" />
+                <ScalarProperty Name="CodigoTarjeta" ColumnName="CodigoTarjeta" />
+                <ScalarProperty Name="TotalFinal" ColumnName="TotalFinal" />
+                <ScalarProperty Name="RecargoTarjeta" ColumnName="RecargoTarjeta" />
+                <ScalarProperty Name="IVA" ColumnName="IVA" />
+                <ScalarProperty Name="TotalSinIVA" ColumnName="TotalSinIVA" />
+                <ScalarProperty Name="NumeroFactura" ColumnName="NumeroFactura" />
+                <ScalarProperty Name="IDUsuario" ColumnName="IDUsuario" />
+                <ScalarProperty Name="FechaCompra" ColumnName="FechaCompra" />
+                <ScalarProperty Name="TipoPago" ColumnName="TipoPago" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

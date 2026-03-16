@@ -1,0 +1,86 @@
+﻿@model VentaMusical.Models.ViewModels.Carritos.ResumenFactura
+
+<div class="card border-primary mb-3">
+    <div class="card-header bg-primary text-white">
+        🧾 Resumen Factura
+    </div>
+    <div class="card-body">
+        <dl class="row">
+
+            <dt class="col-sm-6">Subtotal</dt>
+            <dd class="col-sm-6 text-end">@Model.Subtotal.ToString("C")</dd>
+
+            <dt class="col-sm-6">IVA (13%)</dt>
+            <dd class="col-sm-6 text-end">@Model.IVA.ToString("C")</dd>
+
+            <dt class="col-sm-6">Recargo por Tarjeta</dt>
+            <dd class="col-sm-6 text-end">
+                <span class="badge bg-secondary">@Model.Recargo.ToString("C")</span>
+            </dd>
+
+            <dt class="col-sm-6">Total</dt>
+            <dd class="col-sm-6 text-end">
+                <span class="fw-bold">@Model.TotalFinal.ToString("C")</span>
+            </dd>
+
+            <dt class="col-sm-6">Crédito Usado</dt>
+            <dd class="col-sm-6 text-end text-success">@Model.CreditoUsado.ToString("C")</dd>
+
+            <dt class="col-sm-6">Pago Restante</dt>
+            <dd class="col-sm-6 text-end text-warning">@Model.TotalConCredito.ToString("C")</dd>
+
+            <dt class="col-sm-6">Crédito Disponible</dt>
+            <dd class="col-sm-6 text-end">
+                @if (Model.MontoRestante == 0)
+                {
+                    <span class="badge bg-danger">Sin crédito disponible</span>
+                }
+                else if (Model.MontoRestante < 2000)
+                {
+                    <span class="badge bg-warning" title="Crédito menor a ₡2000, considerá recargar.">
+                        ₡@Model.MontoRestante.ToString("N2") (¡Bajo!)
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-success" title="Crédito disponible en buen estado.">
+                        ₡@Model.MontoRestante.ToString("N2")
+                    </span>
+                }
+            </dd>
+
+        </dl>
+
+        @if (Model.TotalFinal > 100000)
+        {
+            <div class="alert alert-warning mt-3">
+                ⚠️ Alto total: revisá los cargos aplicados.
+            </div>
+        }
+    </div>
+</div>
+<form method="post" action="@Url.Action("Facturar", "Carrito")">
+    <input type="hidden" name="idUsuario" value="@Session["IDUsuario"]" />
+
+    <div class="form-group mb-3">
+        <label for="tipoPago">💳 Tipo de Pago</label>
+        <select id="tipoPago" name="tipoPago" class="form-control" onchange="mostrarCamposTarjeta(this.value)">
+            <option value="Tarjeta">Tarjeta</option>
+            <option value="PayPal">PayPal</option>
+            <option value="Transferencia">Transferencia</option>
+        </select>
+    </div>
+
+    <div id="camposTarjeta" style="display:none;">
+        <div class="form-group mb-2">
+            <label for="codigoTarjeta">Últimos 4 dígitos</label>
+            <input type="text" name="codigoTarjeta" maxlength="4" class="form-control" />
+        </div>
+        <div class="form-group mb-3">
+            <label for="codigoSeguridad">Código de Seguridad</label>
+            <input type="password" name="codigoSeguridad" maxlength="4" class="form-control" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        

@@ -1,0 +1,162 @@
+﻿@model VentaMusical.Models.ViewModels.Usuarios.EditarUsuario
+
+@{
+    ViewBag.Title = "Editar Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+
+<!-- Modal de mensajes -->
+@if (ViewBag.ValorMensaje == 1 || ViewBag.ValorMensaje == 0)
+{
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            onclick="document.location.href='@(Session["Rol"] != null && Session["Rol"].Equals("Admin") ? Url.Content("~/Usuarios/Index") : Url.Content("~/Home/Dashboard"))'">
+                        &times;
+                    </button>
+                    <h2 class="modal-title">Mensaje</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="alert @(ViewBag.ValorMensaje == 1 ? "alert-success" : "alert-danger")">
+                        @ViewBag.MensajeProceso
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal"
+                            onclick="document.location.href='@(Session["Rol"] != null && Session["Rol"].Equals("Admin") ? Url.Content("~/Usuarios/Index") : Url.Content("~/Home/Dashboard"))'">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm("Edit", "Usuarios", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.IDUsuario)
+    @Html.HiddenFor(m => m.NumeroIdentificacion)
+
+    <div class="card shadow-lg p-4 rounded-4" style="background-color: #FDE2BA">
+        <div class="row">
+
+            <!-- Columna izquierda: botones y campos principales -->
+            <div class="col-md-6 d-flex flex-column align-items-center">
+
+                <div class="w-100 mb-3">
+                    @Html.LabelFor(m => m.Nombre)
+                    @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="w-100 mb-3">
+                    @Html.LabelFor(m => m.Apellido)
+                    @Html.TextBoxFor(m => m.Apellido, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Apellido, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="w-100 mb-3">
+                    @Html.LabelFor(m => m.Genero)
+                    @Html.DropDownListFor(m => m.Genero, new List<SelectListItem>
+                    {
+                        new SelectListItem() { Text = "Masculino", Value = "Masculino" },
+                        new SelectListItem() { Text = "Femenino", Value = "Femenino" },
+                        new SelectListItem() { Text = "Otro", Value = "Otro" }
+                    }, new { @class = "form-select" })
+                    @Html.ValidationMessageFor(m => m.Genero, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="w-100 mb-3">
+                    @Html.LabelFor(m => m.Correo)
+                    @Html.TextBoxFor(m => m.Correo, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Correo, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+
+            <!-- Columna derecha: otros campos y administración -->
+            <div class="col-md-6 d-flex flex-column align-items-center">
+
+                <div class="w-100 mb-3">
+                    @Html.LabelFor(m => m.TipoTarjeta)
+                    @Html.DropDownListFor(m => m.TipoTarjeta, new List<SelectListItem>
+                    {
+                        new SelectListItem() { Text = "VISA", Value = "VISA" },
+                        new SelectListItem() { Text = "MASTERCARD", Value = "MASTERCARD" },
+                        new SelectListItem() { Text = "AMERICAN EXPRESS", Value = "AMERICAN EXPRESS" }
+                    }, new { @class = "form-select" })
+                    @Html.ValidationMessageFor(m => m.TipoTarjeta, "", new { @class = "text-danger" })
+                </div>
+
+                @if (Session["Rol"] != null && Session["Rol"].Equals("Admin"))
+                {
+                    <div class="w-100 mb-3">
+                        @Html.LabelFor(m => m.DineroDisponible)
+                        @Html.TextBoxFor(m => m.DineroDisponible, new { @type = "number", @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.DineroDisponible, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="w-100 mb-3">
+                        @Html.LabelFor(m => m.Perfil)
+                        @Html.DropDownListFor(m => m.Perfil, new List<SelectListItem>
+                        {
+                            new SelectListItem() { Text = "Usuario", Value = "Usuario" },
+                            new SelectListItem() { Text = "Admin", Value = "Admin" },
+                            new SelectListItem() { Text = "Contabilidad", Value = "Contabilidad" }
+                        }, new { @class = "form-select" })
+                        @Html.ValidationMessageFor(m => m.Perfil, "", new { @class = "text-danger" })
+                    </div>
+                }
+                else
+                {
+                    @Html.HiddenFor(m => m.DineroDisponible)
+                    @Html.HiddenFor(m => m.Perfil)
+                }
+
+                <div class="w-100 mb-3">
+                    @Html.LabelFor(m => m.NumeroTarjeta)
+                    @Html.TextBoxFor(m => m.NumeroTarjeta, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.NumeroTarjeta, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="w-100 mb-3">
+                    @Html.LabelFor(m => m.Contrasena)
+                    @Html.TextBoxFor(m => m.Contrasena, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Contrasena, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+
+        </div>
+
+        <br />
+
+
+    </div>
+    <br />
+
+    <div class="d-flex justify-content-evenly">
+        <input type="submit" value="Guardar Cambios" class="btn btnCreate w-100 btn-lg" />
+        <input type="button" class="btn btn-secondary w-100 btn-lg" value="Volver"
+               onclick="document.location.href='@(Session["Rol"] != null && Session["Rol"].Equals("Admin") ? Url.Content("~/Usuarios/Index") : Url.Content("~/Home/Dashboard"))'" />
+    </div>
+}
+
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var myModalEl = document.getElementById('myModal');
+            if (myModalEl) {
+                var modal = new bootstrap.Modal(myModalEl);
+                modal.show();
+            }
+        });
+    </script>
+}

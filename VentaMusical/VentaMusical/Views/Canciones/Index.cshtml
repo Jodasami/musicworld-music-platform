@@ -1,0 +1,201 @@
+﻿@model IEnumerable<VentaMusical.Models.ViewModels.Canciones.ListarCanciones>
+
+@{
+    ViewBag.Title = "Listado de Canciones";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Listado de Canciones</h2>
+<br />
+
+<!-- Mensajes visuales -->
+@if (ViewBag.ValorMensaje == 1)
+{
+    <div class="alert alert-success text-center">
+        @ViewBag.MensajeProceso
+    </div>
+}
+else if (ViewBag.ValorMensaje == 0)
+{
+    <div class="alert alert-danger text-center">
+        @ViewBag.MensajeProceso
+    </div>
+}
+
+@if (Session["Usuario"] != null && Session["Rol"].Equals("Admin"))
+{
+    <!-- Filtros superiores -->
+    using (Html.BeginForm("Index", "Canciones", FormMethod.Get))
+    {
+        <div class="row mb-3">
+            @if (Session["Usuario"] != null && Session["Rol"].Equals("Admin"))
+            {
+                <div class="col-md-4 align-self-end text-end">
+                    <input type="button" class="btn btnCreate w-100" value="Crear nueva canción"
+                           onclick="document.location.href='@Url.Action("Create", "Canciones")'" />
+                </div>
+            }
+
+            @if (Session["Usuario"] != null && Session["Rol"].Equals("Usuario"))
+            {
+                <div class="col-md-4 align-self-end text-end">
+                    <a href="@Url.Action("Index", "Carrito")" class="btn btnCreate">
+                        🛒 Ver Carrito
+                    </a>
+                </div>
+            }
+
+            <div class="col-md-3">
+                <label>Buscar por Nombre:</label>
+                @Html.TextBox("busquedaNombre", Request.QueryString["busquedaNombre"], new { @class = "form-control" })
+            </div>
+
+            <div class="col-md-2 align-self-end">
+                <input type="submit" value="Buscar" class="btn btnCreate  w-100" />
+            </div>
+        </div>
+    } <!-- <- Formulario de filtros cerrado aquí -->
+    <!-- Tabla de canciones -->
+    <table class="table table-striped table-bordered text-center custom-table">
+        <thead class="table-dark">
+            <tr>
+                <th>Cod. Canción</th>
+                <th>Cod. Género</th>
+                <th>Cod. Álbum</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Disponible</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.CodigoCancion</td>
+                    <td>@item.NombreGenero (Cod: @item.CodigoGenero)</td>
+                    <td>@item.NombreAlbum (Cod: @item.CodigoAlbum)</td>
+                    <td>@item.NombreCancion</td>
+                    <td>₡@item.Precio.ToString("N2")</td>
+                    <td>@item.CantidadDisponible</td>
+                    <td>
+                        @if (Session["Usuario"] != null && Session["Rol"].Equals("Admin"))
+                        {
+                            <a href="@Url.Action("Edit", new { id = item.CodigoCancion })" class="btn btnEdit btn-sm">Editar</a>
+                            <a href="@Url.Action("Delete", new { id = item.CodigoCancion })" class="btn btnDelete btn-sm">Eliminar</a>
+                        }
+
+                        <a href="@Url.Action("Details", new { id = item.CodigoCancion })" class="btn btnDetails btn-sm">Detalles</a>
+
+
+                        <!-- Formulario independiente para agregar al carrito -->
+                        @if (Session["Usuario"] != null && Session["Rol"].Equals("Usuario"))
+                        {
+                            using (Html.BeginForm("Agregar", "Carrito", FormMethod.Post, new { @class = "d-inline-flex align-items-center mt-2" }))
+                            {
+                                @Html.Hidden("codigoCancion", item.CodigoCancion)
+                                <input type="number" name="cantidad" value="1" min="1" max="@item.CantidadDisponible"
+                                       class="form-control form-control-sm me-2" style="width: 60px;" />
+                                <button type="submit" class="btn btn-success btn-sm">🛒 Comprar</button>
+                            }
+
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+
+
+
+@if (Session["Usuario"] != null && Session["Rol"].Equals("Usuario"))
+{
+
+    <!-- Filtros superiores -->
+    using (Html.BeginForm("Index", "Canciones", FormMethod.Get))
+    {
+        <div class="row mb-4">
+            @if (Session["Usuario"] != null && Session["Rol"].Equals("Admin"))
+            {
+                <div class="col-md-4 align-self-end text-end">
+                    <input type="button" class="btn btnCreate w-100" value="Crear nueva canción"
+                           onclick="document.location.href='@Url.Action("Create", "Canciones")'" />
+                </div>
+            }
+
+            @if (Session["Usuario"] != null && Session["Rol"].Equals("Usuario"))
+            {
+                <div class="col-md-4 align-self-end text-end">
+                    <a href="@Url.Action("Index", "Carrito")" class="btn btnCreate">
+                        🛒 Ver Carrito
+                    </a>
+                </div>
+            }
+
+            <div class="col-md-3">
+                <label>Buscar por Nombre:</label>
+                @Html.TextBox("busquedaNombre", Request.QueryString["busquedaNombre"], new { @class = "form-control" })
+            </div>
+
+            <div class="col-md-2 align-self-end">
+                <input type="submit" value="Buscar" class="btn btnCreate w-100" />
+            </div>
+        </div>
+    }
+
+    <!-- Cards de canciones -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <!-- Imagen del álbum -->
+                    <img src="@Url.Content(item.ImagenAlbum)"
+                         class="card-img-top img-fluid"
+                         alt="Portada Álbum"
+                         style="height: 220px; object-fit: cover;" />
+
+                    <div class="card-body text-center">
+                        <!-- Nombre de la canción -->
+                        <h5 class="card-title">@item.NombreCancion</h5>
+
+                        <!-- Nombre del álbum -->
+                        <p class="card-text text-muted mb-1">
+                            Álbum: <strong>@item.NombreAlbum</strong>
+                        </p>
+
+                        <!-- Precio -->
+                        <p class="card-text fw-bold text-success">
+                            ₡@item.Precio.ToString("N2")
+                        </p>
+                    </div>
+
+                    <div class="card-footer d-flex justify-content-between">
+                        <!-- Botón Detalles -->
+                        <a href="@Url.Action("Details", new { id = item.CodigoCancion })"
+                           class="btn btnDetails btn-sm">Detalles</a>
+
+                        <!-- Botón Comprar -->
+                        @if (Session["Usuario"] != null && Session["Rol"].Equals("Usuario"))
+                        {
+                            using (Html.BeginForm("Agregar", "Carrito", FormMethod.Post, new { @class = "d-inline" }))
+                            {
+                                @Html.Hidden("codigoCancion", item.CodigoCancion)
+                                @Html.Hidden("cantidad", 1)
+                                <button type="submit" class="btn btn-success btn-sm">🛒 Comprar</button>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+}
+    </div>
+
+}

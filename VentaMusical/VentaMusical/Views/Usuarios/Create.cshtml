@@ -1,0 +1,189 @@
+﻿
+@model VentaMusical.Models.ViewModels.Usuarios.CrearUsuario
+
+@{
+    ViewBag.Title = "Crear Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Agregar Usuario</h2>
+<br />
+<br />
+
+@if (ViewBag.ValorMensaje == 1)
+{
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    @if (Session["Usuario"] != null && Session["Rol"].Equals("Admin"))
+                    {
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                onclick="document.location.href='@Url.Content("~/Usuarios/Index")'">
+                            &times;
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                onclick="document.location.href='@Url.Content("~/Home/Index")'">
+                            &times;
+                        </button>
+                    }
+
+                    <h2 class="modal-title">Mensaje</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-success">@ViewBag.MensajeProceso</div>
+                </div>
+                <div class="modal-footer">
+                    @if (Session["Usuario"] != null && Session["Rol"].Equals("Admin"))
+                    {
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal"
+                                onclick="document.location.href='@Url.Content("~/Usuarios/Index")'">
+                            Cerrar
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal"
+                                onclick="document.location.href='@Url.Content("~/Home/Index")'">
+                            Cerrar
+                        </button>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else if (ViewBag.ValorMensaje == 0)
+{
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">&times;</button>
+                    <h2 class="modal-title">Mensaje</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger">@ViewBag.MensajeProceso</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@using (Html.BeginForm("Create", "Usuarios", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+
+    <div class="card shadow-lg p-4 rounded-4" style="background-color: #FDE2BA">
+        <div class="row">
+            <div class="col-md-6 d-flex flex-column">
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.NumeroIdentificacion)
+                    @Html.TextBoxFor(m => m.NumeroIdentificacion, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.NumeroIdentificacion)
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Nombre)
+                    @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Nombre)
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Apellido)
+                    @Html.TextBoxFor(m => m.Apellido, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Apellido)
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(u => u.Genero)
+                    @Html.DropDownListFor(u => u.Genero, new List<SelectListItem>
+                    {
+                        new SelectListItem() { Text = "Masculino", Value = "Masculino" },
+                        new SelectListItem() { Text = "Femenino", Value = "Femenino" },
+                        new SelectListItem() { Text = "Otro", Value = "Otro" }
+                    }, new { @class = "form-select" })
+                    @Html.ValidationMessageFor(m => m.Genero)
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Correo)
+                    @Html.TextBoxFor(m => m.Correo, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Correo)
+                </div>
+            </div>
+
+            <div class="col-md-6 d-flex flex-column">
+                <div class="mb-3">
+                    @Html.LabelFor(u => u.TipoTarjeta)
+                    @Html.DropDownListFor(u => u.TipoTarjeta, new List<SelectListItem>
+                    {
+                        new SelectListItem() { Text = "VISA", Value = "VISA" },
+                        new SelectListItem() { Text = "MASTERCARD", Value = "MASTERCARD" },
+                        new SelectListItem() { Text = "AMERICAN EXPRESS", Value = "AMERICAN EXPRESS" }
+                    }, new { @class = "form-select" })
+                    @Html.ValidationMessageFor(m => m.TipoTarjeta)
+                </div>
+
+                <div class="mb-3">
+                    @Html.HiddenFor(u => u.DineroDisponible, new { @Value = "0" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.NumeroTarjeta)
+                    @Html.TextBoxFor(m => m.NumeroTarjeta, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.NumeroTarjeta)
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Contrasena)
+                    @Html.TextBoxFor(m => m.Contrasena, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Contrasena)
+                </div>
+
+                <div class="mb-3">
+                    @Html.HiddenFor(u => u.Perfil, new { @Value = "Usuario" })
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <br />
+
+    <div class="d-flex justify-content-evenly">
+        <input type="submit" class="btn btnCreate w-100 btn-lg" value="Guardar Usuario" />
+       
+
+
+        @if (Session["Usuario"] != null && Session["Rol"].Equals("Admin"))
+        {
+            <input type="button" class="btn btn-secondary w-100 btn-lg" value="Volver"
+                   onclick="document.location.href='@Url.Content("~/Usuarios/Index")'" />
+        }
+        else
+        {
+            <input type="button" class="btn btn-secondary w-100 btn-lg" value="Volver"
+                   onclick="document.location.href='@Url.Content("~/Home/Index")'" />
+        }
+
+    </div>
+
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myModal').modal('show');
+        });
+    </script>
+}
